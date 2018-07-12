@@ -1,11 +1,11 @@
 # FPGAComputer
 This is a 16-bit computer implemented in the DE0-NANO FPGA.
 
-The computer has 16-bit CPU, 64K 16-bit words, UART (115200 bps), and VGA (640x480, text-based frame buffer, 80x60 characters).
+The computer has 16-bit CPU, 64KB, UART (115200 bps), and VGA (640x480, text-based frame buffer, 80x60 characters).
 
 The 16-bit CPU has 8 general-purpose registers (r0 – r7), pc (program counter), sp (stack pointer), ir (instruction register), mbr (memory buffer register), h (higher word when multiplying, or remainder when dividing).
 
-The address bus is 16 bits wide, addressing 65536 memory locations (words). Data bus is also 16 bits wide, having each memory location 16 bits wide. This gives 65536 16-bits words, or 128KB.
+The address bus is 16 bits wide, addressing 65536 addresses. Data bus is also 16 bits wide, but all the addresses are 8-bit aligned. This gives 65536 bytes, or 64KB.
 
 Video output is VGA, 640x480. Text mode hase 80x60 characters, each character being 8x8  pixels in dimensions. Video framebuffer in text mode has 4800 16-bit words (80x60 characters). The lower byte has the ASCII character, while the upper byte has the attributes (3 bits for the background color, 3 bits for the foreground color, inverted, and the last two bits unused).
 
