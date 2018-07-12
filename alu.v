@@ -55,10 +55,10 @@ div #(.N(N))div1 (
 always @(negedge CLK) begin
 	case (opcode)
 		ALU_ADD: begin 
-			{flags[CARRY], tmp[N-1:0]} = a + b; 
+			tmp = a + b; 
 		end
 		ALU_SUB: begin 
-			{flags[CARRY], tmp[N-1:0]} = a - b; 
+			tmp = a - b; 
 		end
 		ALU_MUL: begin 
 			{high, tmp[N-1:0]} = a * b;
@@ -89,16 +89,19 @@ always @(negedge CLK) begin
 			end
 			
 		end
-		ALU_AND: tmp = a & b;
-		ALU_OR : tmp = a | b;
-		ALU_XOR: tmp = a ^ b;
-		ALU_NEG: tmp = ~a;
+		ALU_AND: tmp = {{N{1'b0}}, a & b};
+		ALU_OR : tmp = {{N{1'b0}}, a | b};
+		ALU_XOR: tmp = {{N{1'b0}}, a ^ b};
+		ALU_NEG: tmp = {{N{1'b0}}, ~a};
 		ALU_SHL: tmp = a << b;
 		ALU_SHR: tmp = a >> b;
 	endcase
 	
 	// ZERO
-	flags[ZERO] <= tmp == 0;
+	flags[ZERO] <= tmp[N-1:0] == 0;
+
+	// CARRY
+	flags[CARRY] <= tmp[N];
 	
 	// OVERFLOW
 	flags[OVERFLOW] <= (opcode == ALU_ADD) && (a[N-1] == b[N-1]) && (tmp[N-1] != a[N-1]);
