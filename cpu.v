@@ -16,7 +16,8 @@ module cpu#(parameter N = 5'd16)(
 	input [7:0] rx_data,     // UART RECEIVED BYTE 
 	output tx_send,          // UART TX send signal
 	input tx_busy,           // UART TX busy signal
-	output [7:0] tx_data     // UART TX data
+	output [7:0] tx_data,    // UART TX data
+	output [1:0] vga_mode	 // VGA mode: 0-text; 1-320x240
 );
 
 
@@ -101,7 +102,9 @@ ALU #(.N(N))alu(
 always @ (posedge CLOCK_50) begin
 	if (reset) begin
 		// RESET
+		`ifdef DEBUG
 		LED[7:0] <= 0;
+		`endif
 		halt <= 0;
 		pc <= 0;
 		mbr <= 0;
@@ -134,9 +137,9 @@ always @ (posedge CLOCK_50) begin
 	else if ((~noirq & irq) && (irq_count == 0)) begin
 		`ifdef DEBUG
 		$display("&&&&&&&&&&&&&&&&&&&&&&&&&& IRQ HAPPENED: %d",  irq);
-		`endif
 		LED[3:0] <= irq[3:0];
 		LED[7:4] <= 0;
+		`endif
 		if (irq[0]) begin
 			noirq[0] <= 1; // mask IRQ0 off - no IRQ0
 			irq_r[0] <= 1;
@@ -151,8 +154,8 @@ always @ (posedge CLOCK_50) begin
 	else if (irq_count && (ir == 0)) begin
 		`ifdef DEBUG
 		$display("####################################################IRQ HAPPENED: %d",  irq_r);
-		`endif
 		LED[4] <= 1;
+		`endif
 		case (irq_count)
 			1: begin
 				`ifdef DEBUG
@@ -194,8 +197,8 @@ always @ (posedge CLOCK_50) begin
 					addr <= 16'd4;
 				end 
 				if (irq_r[1]) begin
-					LED[7] <= 1;
 					`ifdef DEBUG
+					LED[7] <= 1;
 					$display("3.1 JUMP TO IRQ #2 SERVICE");
 					`endif
 					pc <= 16'd16;
@@ -211,7 +214,9 @@ always @ (posedge CLOCK_50) begin
 	else begin
 		case (ir) 
 			16'h0: begin
+					`ifdef DEBUG
 					LED[2] <= 1;
+					`endif
 					// begin of the fetch; we have sent the memrd signal to the memory
 					// in the next cycle, we will fetch the instruction from the data bus (came from the memory)
 					if (mc_count == 16'h00ff) begin
@@ -312,8 +317,8 @@ always @ (posedge CLOCK_50) begin
 							4'b0100: begin
 								`ifdef DEBUG
 								$display("%2x: OUT [%4d], r%-d",ir[3:0], data, (ir[15:12]));
-								`endif
 								LED[3] <= 1;
+								`endif
 								case (mc_count) 
 									0: begin
 										pc <= pc + 2'd2;  // move to the next instruction
@@ -324,6 +329,9 @@ always @ (posedge CLOCK_50) begin
 											end
 											67: begin  // LEDs
 												LED[7:0] <= regs[ir[15:12]];
+											end
+											128: begin  // graphics mode: 0 - text; 1 - 320x240
+												vga_mode <= regs[ir[15:12]];
 											end
 											default: begin
 											end
@@ -480,7 +488,9 @@ always @ (posedge CLOCK_50) begin
 										pc <= data;
 										addr <= data >> 1;
 										ir <= 0;
+										`ifdef DEBUG
 										LED[6] <= 1;
+										`endif
 										// ENABLE IRQ
 										//noirq <= 0;
 										if (noirq[0] == 1) begin
@@ -498,12 +508,12 @@ always @ (posedge CLOCK_50) begin
 							4'b1111: begin
 								`ifdef DEBUG
 								$display("HALT");
+								LED[5] <= 1;
 								`endif
 								halt <= 1;
 								pc <= pc - 2'd2;
 								addr <= (pc - 2'd2) >> 1;
 								ir <= 0;
-								LED[5] <= 1;
 							end
 						endcase
 					end // end of GROUP - 0 (NOP, MOV, IN, OUT, PUSH, POP, RET, IRET)

@@ -1,13 +1,13 @@
 # FPGAComputer
 This is a 16-bit computer implemented in the DE0-NANO FPGA.
 
-The computer has 16-bit CPU, 64KB, UART (115200 bps), and VGA (640x480, text-based frame buffer, 80x60 characters).
+The computer has 16-bit CPU, 64KB, UART (115200 bps), and VGA (640x480, text-based frame buffer, 80x60 characters, or the graphics mode of 320x240 pixels, each one in one of 8 colors).
 
 The 16-bit CPU has 8 general-purpose registers (r0 – r7), pc (program counter), sp (stack pointer), ir (instruction register), mbr (memory buffer register), h (higher word when multiplying, or remainder when dividing).
 
-The address bus is 16 bits wide, addressing 65536 addresses. Data bus is also 16 bits wide, but all the addresses are 8-bit aligned. This gives 65536 bytes, or 64KB.
+The address bus is 16 bits wide, addressing 65536 bytes. Data bus is also 16 bits wide, but all the addresses are 8-bit aligned. This gives 65536 bytes, or 64KB.
 
-Video output is VGA, 640x480. Text mode hase 80x60 characters, each character being 8x8  pixels in dimensions. Video framebuffer in text mode has 4800 16-bit words (80x60 characters). The lower byte has the ASCII character, while the upper byte has the attributes (3 bits for the background color, 3 bits for the foreground color, inverted, and the last two bits unused).
+Video output is VGA, 640x480. Text mode hase 80x60 characters, each character being 8x8  pixels in dimensions. Video framebuffer in text mode has 4800 16-bit words (80x60 characters). The lower byte has the ASCII character, while the upper byte has the attributes (3 bits for the background color, 3 bits for the foreground color, inverted, and the last two bits unused). In graphics mode, the resolution is 320x240 pixels. Each pixel is 4 bits long, having two pixels per byte in the frame buffer. Each pixel's color is defined by those four bits by: xrgb.
 
 It has two interrupts: IRQ0 and IRQ1. IRQ0 is connected to the KEY2 of the DE0-NANO, while IDQ1 is connected to the UART. Whenever a byte comes to the UART, it generates an IRQ1. Interrupt causes CPU to push flags to the stack, then to push PC to the stack and then to jump to the location designated for the CPU:
 * for the IRQ0, it is 0x0004, and
@@ -28,6 +28,25 @@ VGA female connector is connected via resistors to the GPIO-0 expansion header o
 * GPIO_B (pin 6, GPIO_03, PIN_D3) -> 68Ohm -> VGA_B,
 * GPIO_HS (pin 8, GPIO_05, PIN_B4) -> 470Ohm -> VGA_HORIZONTAL_SYNC,
 * GPIO_VS (pin 10, GPIO_07, PIN_B5) -> 470Ohm -> VGA_VERTICAL_SYNC.
+
+# VGA graphics mode
+Graphics mode is 320x240 pixels. Since the text mode is the default mode, to switch to the graphics mode, you need to type in the assembler code following:
+
+out [128], 1
+
+To switch back to the text mode, you need to enter:
+
+out [128], 0
+
+One byte of the video memory is organised like this:
+
+xrgvxrgb
+
+One byte holds two pixels. The x bit is unused, and the other bits define red, green and blue component of the color for each of those two pixels. Video frame buffer starts at the address 2400 (decimal). So, if you want to put four white pixels at the top left corner of the screen (from the (0,0) to the (3,0) coordinates), you need to type:
+
+mov r0, 0x7777
+st [2400], r0
+
 
 # UART interface
 

@@ -82,9 +82,17 @@ reg wr, wr2;
 wire [7:0] irq;
 
 // ###################
-// Video VGA instance 
+// Video VGA text instance 
 // ###################
-vga_module vga (
+
+reg [1:0]vga_mode;
+wire v0, v1;
+assign v0 = (vga_mode == 2'b00);
+assign v1 = (vga_mode == 2'b01);
+
+vga_module vga0 (
+	v0,
+	
 	//////////// CLOCK //////////
 	CLOCK_50,
 
@@ -103,6 +111,29 @@ vga_module vga (
 	rd2, 
 	wr2
 );
+
+vga_320x240 vga1 (
+	v1,
+	
+	//////////// CLOCK //////////
+	CLOCK_50,
+
+	//////////// RESET KEY //////////
+	reset,
+
+	//////////// GPIO //////////
+	r, 
+	g, 
+	b, 
+	hs, 
+	vs,
+	
+	data2,
+	addr2,
+	rd2, 
+	wr2
+);
+
 
 wire r, g, b, hs, vs;
 wire vgaoe = 1'b1;
@@ -145,7 +176,8 @@ cpu cpu (
 	rx_data_r,  // UART RX data
 	tx_send,    // UART TX send signal
 	tx_busy,    // UART TX busy signal
-	tx_data     // UART TX data
+	tx_data,    // UART TX data
+	vga_mode		// VGA mode: 0-text; 1-320x240
 );
 
 // ####################################
@@ -227,6 +259,7 @@ end
 initial begin
 	reset_counter <= 7'b0;
 	timer_reset <= 1'b1;
+	vga_mode <= 2'b00; // text mode
 end
 
 endmodule
