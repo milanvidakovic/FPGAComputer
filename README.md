@@ -40,7 +40,7 @@ out [128], 0
 
 One byte of the video memory is organised like this:
 
-xrgvxrgb
+xrgbxrgb
 
 One byte holds two pixels. The x bit is unused, and the other bits define red, green and blue component of the color for each of those two pixels. Video frame buffer starts at the address 2400 (decimal). So, if you want to put four white pixels at the top left corner of the screen (from the (0,0) to the (3,0) coordinates), you need to type:
 
