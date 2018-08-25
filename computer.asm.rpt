@@ -1,5 +1,5 @@
 Assembler report for computer
-Sun Aug 19 15:29:19 2018
+Sat Aug 25 11:51:09 2018
 Quartus II 64-Bit Version 13.0.0 Build 156 04/24/2013 SJ Web Edition
 
 
@@ -37,7 +37,7 @@ applicable agreement for further details.
 +---------------------------------------------------------------+
 ; Assembler Summary                                             ;
 +-----------------------+---------------------------------------+
-; Assembler Status      ; Successful - Sun Aug 19 15:29:19 2018 ;
+; Assembler Status      ; Successful - Sat Aug 25 11:51:09 2018 ;
 ; Revision Name         ; computer                              ;
 ; Top-level Entity Name ; computer                              ;
 ; Family                ; Cyclone IV E                          ;
@@ -92,8 +92,8 @@ applicable agreement for further details.
 ; Option         ; Setting                                       ;
 +----------------+-----------------------------------------------+
 ; Device         ; EP4CE22F17C6                                  ;
-; JTAG usercode  ; 0x003F8C57                                    ;
-; Checksum       ; 0x003F8C57                                    ;
+; JTAG usercode  ; 0x0044BEA5                                    ;
+; Checksum       ; 0x0044BEA5                                    ;
 +----------------+-----------------------------------------------+
 
 
@@ -103,13 +103,13 @@ applicable agreement for further details.
 Info: *******************************************************************
 Info: Running Quartus II 64-Bit Assembler
     Info: Version 13.0.0 Build 156 04/24/2013 SJ Web Edition
-    Info: Processing started: Sun Aug 19 15:29:17 2018
+    Info: Processing started: Sat Aug 25 11:51:07 2018
 Info: Command: quartus_asm --read_settings_files=off --write_settings_files=off computer -c computer
 Info (115031): Writing out detailed assembly data for power analysis
 Info (115030): Assembler is generating device programming files
 Info: Quartus II 64-Bit Assembler was successful. 0 errors, 0 warnings
-    Info: Peak virtual memory: 492 megabytes
-    Info: Processing ended: Sun Aug 19 15:29:19 2018
+    Info: Peak virtual memory: 483 megabytes
+    Info: Processing ended: Sat Aug 25 11:51:09 2018
     Info: Elapsed time: 00:00:02
     Info: Total CPU time (on all processors): 00:00:02
 

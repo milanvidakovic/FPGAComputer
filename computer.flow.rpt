@@ -1,5 +1,5 @@
 Flow report for computer
-Sun Aug 19 15:29:29 2018
+Sat Aug 25 11:51:21 2018
 Quartus II 64-Bit Version 13.0.0 Build 156 04/24/2013 SJ Web Edition
 
 
@@ -40,15 +40,15 @@ applicable agreement for further details.
 +---------------------------------------------------------------------------------+
 ; Flow Summary                                                                    ;
 +------------------------------------+--------------------------------------------+
-; Flow Status                        ; Successful - Sun Aug 19 15:29:29 2018      ;
+; Flow Status                        ; Successful - Sat Aug 25 11:51:21 2018      ;
 ; Quartus II 64-Bit Version          ; 13.0.0 Build 156 04/24/2013 SJ Web Edition ;
 ; Revision Name                      ; computer                                   ;
 ; Top-level Entity Name              ; computer                                   ;
 ; Family                             ; Cyclone IV E                               ;
 ; Device                             ; EP4CE22F17C6                               ;
 ; Timing Models                      ; Final                                      ;
-; Total logic elements               ; 3,932 / 22,320 ( 18 % )                    ;
-;     Total combinational functions  ; 3,858 / 22,320 ( 17 % )                    ;
+; Total logic elements               ; 4,454 / 22,320 ( 20 % )                    ;
+;     Total combinational functions  ; 4,413 / 22,320 ( 20 % )                    ;
 ;     Dedicated logic registers      ; 599 / 22,320 ( 3 % )                       ;
 ; Total registers                    ; 599                                        ;
 ; Total pins                         ; 87 / 154 ( 56 % )                          ;
@@ -64,7 +64,7 @@ applicable agreement for further details.
 +-------------------+---------------------+
 ; Option            ; Setting             ;
 +-------------------+---------------------+
-; Start date & time ; 08/19/2018 15:28:31 ;
+; Start date & time ; 08/25/2018 11:50:13 ;
 ; Main task         ; Compilation         ;
 ; Revision Name     ; computer            ;
 +-------------------+---------------------+
@@ -75,7 +75,7 @@ applicable agreement for further details.
 +-------------------------------------+---------------------------------+---------------+-------------+----------------+
 ; Assignment Name                     ; Value                           ; Default Value ; Entity Name ; Section Id     ;
 +-------------------------------------+---------------------------------+---------------+-------------+----------------+
-; COMPILER_SIGNATURE_ID               ; 154027284138872.153468531109112 ; --            ; --          ; --             ;
+; COMPILER_SIGNATURE_ID               ; 154027284138872.153519061307564 ; --            ; --          ; --             ;
 ; EDA_OUTPUT_DATA_FORMAT              ; Systemverilog Hdl               ; --            ; --          ; eda_simulation ;
 ; EDA_SIMULATION_TOOL                 ; ModelSim-Altera (SystemVerilog) ; <None>        ; --          ; --             ;
 ; PARTITION_COLOR                     ; 16764057                        ; --            ; --          ; Top            ;
@@ -93,12 +93,12 @@ applicable agreement for further details.
 +---------------------------+--------------+-------------------------+---------------------+------------------------------------+
 ; Module Name               ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
 +---------------------------+--------------+-------------------------+---------------------+------------------------------------+
-; Analysis & Synthesis      ; 00:00:22     ; 1.0                     ; 558 MB              ; 00:00:22                           ;
-; Fitter                    ; 00:00:20     ; 1.0                     ; 923 MB              ; 00:00:20                           ;
-; Assembler                 ; 00:00:02     ; 1.0                     ; 492 MB              ; 00:00:01                           ;
-; TimeQuest Timing Analyzer ; 00:00:03     ; 1.0                     ; 612 MB              ; 00:00:04                           ;
-; EDA Netlist Writer        ; 00:00:05     ; 1.0                     ; 496 MB              ; 00:00:04                           ;
-; Total                     ; 00:00:52     ; --                      ; --                  ; 00:00:51                           ;
+; Analysis & Synthesis      ; 00:00:28     ; 1.0                     ; 562 MB              ; 00:00:26                           ;
+; Fitter                    ; 00:00:24     ; 1.0                     ; 927 MB              ; 00:00:22                           ;
+; Assembler                 ; 00:00:02     ; 1.0                     ; 483 MB              ; 00:00:01                           ;
+; TimeQuest Timing Analyzer ; 00:00:04     ; 1.0                     ; 620 MB              ; 00:00:04                           ;
+; EDA Netlist Writer        ; 00:00:06     ; 1.0                     ; 506 MB              ; 00:00:05                           ;
+; Total                     ; 00:01:04     ; --                      ; --                  ; 00:00:58                           ;
 +---------------------------+--------------+-------------------------+---------------------+------------------------------------+
 
 

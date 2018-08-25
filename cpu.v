@@ -256,7 +256,7 @@ always @ (posedge CLOCK_50) begin
 				end
 			default: begin
 				case ({ir[3:0]}) 
-					// GROUP - 0 (NOP, MOV, IN, OUT, PUSH, POP, RET, IRET)
+					// GROUP - 0 (NOP, MOV, IN, OUT, PUSH, POP, RET, IRET, SWAP)
 					4'b0000: begin
 						case (ir[7:4]) 
 							4'b0000: begin
@@ -504,7 +504,18 @@ always @ (posedge CLOCK_50) begin
 									end
 								endcase
 							end // end of IRET
-							// HALT
+							// SWAP regx, regy
+							4'b1010: begin
+								// SWAP regx, regy
+								`ifdef DEBUG
+								$display("%2x: SWAP r%-d, r%-d", ir[3:0], (ir[11:8]), (ir[15:12]));
+								`endif
+								regs[ir[11:8]] <= regs[ir[15:12]];
+								regs[ir[15:12]] <= regs[ir[11:8]];
+								ir <= 0;     // initiate fetch
+								addr <= pc >> 1;
+								// pc already points to the next instruction
+							end // END OF SWAP
 							4'b1111: begin
 								`ifdef DEBUG
 								$display("HALT");
@@ -516,7 +527,7 @@ always @ (posedge CLOCK_50) begin
 								ir <= 0;
 							end
 						endcase
-					end // end of GROUP - 0 (NOP, MOV, IN, OUT, PUSH, POP, RET, IRET)
+					end // end of GROUP - 0 (NOP, MOV, IN, OUT, PUSH, POP, RET, IRET, SWAP)
 					
 					// GROUP - 1 (JUMP)
 					4'b0001: begin 
@@ -635,10 +646,10 @@ always @ (posedge CLOCK_50) begin
 								end
 								ir <= 0;
 							end // end of JP xx
-							// JNP xx
+							// JNP xx, JS xx - jump no positive, also jump smaller
 							4'b1000: begin
 								`ifdef DEBUG
-								$display("%2x: JNP %x", ir[3:0], data);
+								$display("%2x: JNP (JS) %x", ir[3:0], data);
 								`endif
 								if (f[POSITIVE] == 0) begin
 									pc <= data;
@@ -649,7 +660,37 @@ always @ (posedge CLOCK_50) begin
 									addr <= (pc + 2'd2) >>1;
 								end
 								ir <= 0;
-							end // end of JNP xx
+							end // end of JNP xx, JS xx
+							// JG xx
+							4'b1001: begin
+								`ifdef DEBUG
+								$display("%2x: JG %x", ir[3:0], data);
+								`endif
+								if (f[POSITIVE] == 1 && f[ZERO] == 0) begin
+									pc <= data;
+									addr <= data >> 1;
+								end
+								else begin
+									pc <= pc + 2'd2;
+									addr <= (pc + 2'd2) >>1;
+								end
+								ir <= 0;
+							end // end of JG xx
+							// JSE xx - jump smaller or equal
+							4'b1010: begin
+								`ifdef DEBUG
+								$display("%2x: JSE %x", ir[3:0], data);
+								`endif
+								if (f[POSITIVE] == 0 || f[ZERO] == 1) begin
+									pc <= data;
+									addr <= data >> 1;
+								end
+								else begin
+									pc <= pc + 2'd2;
+									addr <= (pc + 2'd2) >>1;
+								end
+								ir <= 0;
+							end // end of JSE xx
 						endcase // end of case ir[7:4]
 					end // end of GROUP - 1 (JUMP)
 					
@@ -922,7 +963,7 @@ always @ (posedge CLOCK_50) begin
 									ir <= 0;
 								end
 							end // end of CALLNO xx
-							// CALLP xx
+							// CALLP xx, CALLGE xx
 							4'b0111: begin
 								`ifdef DEBUG
 								$display("%2x: CALLP %x", ir[3:0], data);
@@ -961,7 +1002,7 @@ always @ (posedge CLOCK_50) begin
 									ir <= 0;
 								end
 							end // end of CALLP xx
-							// CALLNP xx
+							// CALLNP xx, CALLS xx - call smaller
 							4'b1000: begin
 								`ifdef DEBUG
 								$display("%2x: CALLNP %x", ir[3:0], data);
@@ -1000,6 +1041,84 @@ always @ (posedge CLOCK_50) begin
 									ir <= 0;
 								end
 							end // end of CALLNP xx
+							// CALLG xx
+							4'b1001: begin
+								`ifdef DEBUG
+								$display("%2x: CALLG %x", ir[3:0], data);
+								`endif
+								if (f[POSITIVE] == 1 && f[ZERO] == 0) begin
+									case (mc_count)
+										0: begin
+											// step 1: we try to obtain  memory content from the next cell
+											// xx is already on the data bus
+											mbr <= data;
+											// push to the stack the return value
+											memwr <= 1'b1;
+											memrd <= 1'b0;
+											addr <= regs[SP] >> 1;
+											regs[SP] <= regs[SP] + 2'd2;
+											// the return value is in the pc + 2 
+											data_to_write <= pc + 2'd2;
+											// move to the next step
+											mc_count <= 1;
+										end
+										1: begin
+											// jump to the location in mbr
+											memwr <= 1'b0;
+											memrd <= 1'b1;
+											pc <= mbr;
+											addr <= mbr >> 1;
+											ir <= 0;
+										end
+										default: begin
+										end
+									endcase
+								end
+								else begin
+									pc <= pc + 2'd2;
+									addr <= (pc + 2'd2) >> 1;
+									ir <= 0;
+								end
+							end // end of CALLG xx
+							// CALLSE xx - call smaller or equal
+							4'b1010: begin
+								`ifdef DEBUG
+								$display("%2x: CALLSE %x", ir[3:0], data);
+								`endif
+								if (f[POSITIVE] == 0 || f[ZERO] == 1) begin
+									case (mc_count)
+										0: begin
+											// step 1: we try to obtain  memory content from the next cell
+											// xx is already on the data bus
+											mbr <= data;
+											// push to the stack the return value
+											memwr <= 1'b1;
+											memrd <= 1'b0;
+											addr <= regs[SP] >> 1;
+											regs[SP] <= regs[SP] + 2'd2;
+											// the return value is in the pc + 2 
+											data_to_write <= pc + 2'd2;
+											// move to the next step
+											mc_count <= 1;
+										end
+										1: begin
+											// jump to the location in mbr
+											memwr <= 1'b0;
+											memrd <= 1'b1;
+											pc <= mbr;
+											addr <= mbr >> 1;
+											ir <= 0;
+										end
+										default: begin
+										end
+									endcase
+								end
+								else begin
+									pc <= pc + 2'd2;
+									addr <= (pc + 2'd2) >> 1;
+									ir <= 0;
+								end
+							end // end of CALLSE xx
 					endcase
 					end // end of GROUP - 2 (CALL)
 					
