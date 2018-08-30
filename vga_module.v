@@ -30,7 +30,7 @@ module vga_module#(parameter N = 16)(
 //  PARAMETER declarations
 //=======================================================
 
-localparam VIDEO_MEM_ADDR = 1200;
+localparam VIDEO_MEM_ADDR = 26880/2;
 
 //=======================================================
 //  PORT declarations
@@ -164,9 +164,9 @@ always @(posedge CLOCK_50) begin
 	end
 	
 	if (valid) begin
-		r <= pixels[7 - (x & 7)] ? !curr_char[5+8] : curr_char[2+8];
-		g <= pixels[7 - (x & 7)] ? !curr_char[4+8] : curr_char[1+8];
-		b <= pixels[7 - (x & 7)] ? !curr_char[3+8] : curr_char[0+8];
+		r <= pixels[7 - (x & 7)] ? !curr_char[6+8] : curr_char[2+8];
+		g <= pixels[7 - (x & 7)] ? !curr_char[5+8] : curr_char[1+8];
+		b <= pixels[7 - (x & 7)] ? !curr_char[4+8] : curr_char[0+8];
 	end 
 	else begin
 		// blanking -> no pixels

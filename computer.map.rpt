@@ -1,5 +1,5 @@
 Analysis & Synthesis report for computer
-Sat Aug 25 11:50:41 2018
+Wed Aug 29 23:19:49 2018
 Quartus II 64-Bit Version 13.0.0 Build 156 04/24/2013 SJ Web Edition
 
 
@@ -63,15 +63,15 @@ applicable agreement for further details.
 +---------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                    ;
 +------------------------------------+--------------------------------------------+
-; Analysis & Synthesis Status        ; Successful - Sat Aug 25 11:50:40 2018      ;
+; Analysis & Synthesis Status        ; Successful - Wed Aug 29 23:19:49 2018      ;
 ; Quartus II 64-Bit Version          ; 13.0.0 Build 156 04/24/2013 SJ Web Edition ;
 ; Revision Name                      ; computer                                   ;
 ; Top-level Entity Name              ; computer                                   ;
 ; Family                             ; Cyclone IV E                               ;
-; Total logic elements               ; 4,465                                      ;
-;     Total combinational functions  ; 4,413                                      ;
-;     Dedicated logic registers      ; 599                                        ;
-; Total registers                    ; 599                                        ;
+; Total logic elements               ; 4,638                                      ;
+;     Total combinational functions  ; 4,552                                      ;
+;     Dedicated logic registers      ; 642                                        ;
+; Total registers                    ; 642                                        ;
 ; Total pins                         ; 87                                         ;
 ; Total virtual pins                 ; 0                                          ;
 ; Total memory bits                  ; 524,288                                    ;
@@ -185,6 +185,7 @@ Parallel compilation was disabled, but you have multiple processors available. E
 +------------------------------------+-----------------+-------------------------------------------------------+----------------------------------------------------------------------+---------+
 ; File Name with User-Entered Path   ; Used in Netlist ; File Type                                             ; File Name with Absolute Path                                         ; Library ;
 +------------------------------------+-----------------+-------------------------------------------------------+----------------------------------------------------------------------+---------+
+; ps2_read.v                         ; yes             ; User Verilog HDL File                                 ; C:/Prj/Altera/computer3/ps2_read.v                                   ;         ;
 ; vga_320x240.v                      ; yes             ; User Verilog HDL File                                 ; C:/Prj/Altera/computer3/vga_320x240.v                                ;         ;
 ; computer.v                         ; yes             ; User Verilog HDL File                                 ; C:/Prj/Altera/computer3/computer.v                                   ;         ;
 ; vga_module.v                       ; yes             ; User Verilog HDL File                                 ; C:/Prj/Altera/computer3/vga_module.v                                 ;         ;
@@ -223,29 +224,29 @@ Parallel compilation was disabled, but you have multiple processors available. E
 +---------------------------------------------+----------------+
 ; Resource                                    ; Usage          ;
 +---------------------------------------------+----------------+
-; Estimated Total logic elements              ; 4,465          ;
+; Estimated Total logic elements              ; 4,638          ;
 ;                                             ;                ;
-; Total combinational functions               ; 4413           ;
+; Total combinational functions               ; 4552           ;
 ; Logic element usage by number of LUT inputs ;                ;
-;     -- 4 input functions                    ; 3158           ;
-;     -- 3 input functions                    ; 732            ;
-;     -- <=2 input functions                  ; 523            ;
+;     -- 4 input functions                    ; 3377           ;
+;     -- 3 input functions                    ; 667            ;
+;     -- <=2 input functions                  ; 508            ;
 ;                                             ;                ;
 ; Logic elements by mode                      ;                ;
-;     -- normal mode                          ; 3997           ;
-;     -- arithmetic mode                      ; 416            ;
+;     -- normal mode                          ; 4151           ;
+;     -- arithmetic mode                      ; 401            ;
 ;                                             ;                ;
-; Total registers                             ; 599            ;
-;     -- Dedicated logic registers            ; 599            ;
+; Total registers                             ; 642            ;
+;     -- Dedicated logic registers            ; 642            ;
 ;     -- I/O registers                        ; 0              ;
 ;                                             ;                ;
 ; I/O pins                                    ; 87             ;
 ; Total memory bits                           ; 524288         ;
 ; Embedded Multiplier 9-bit elements          ; 2              ;
 ; Maximum fan-out node                        ; CLOCK_50~input ;
-; Maximum fan-out                             ; 663            ;
-; Total fan-out                               ; 20092          ;
-; Average fan-out                             ; 3.78           ;
+; Maximum fan-out                             ; 706            ;
+; Total fan-out                               ; 20735          ;
+; Average fan-out                             ; 3.77           ;
 +---------------------------------------------+----------------+
 
 
@@ -254,23 +255,24 @@ Parallel compilation was disabled, but you have multiple processors available. E
 +-------------------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+------------------------------------------------------------------------------------------+--------------+
 ; Compilation Hierarchy Node                ; LC Combinationals ; LC Registers ; Memory Bits ; DSP Elements ; DSP 9x9 ; DSP 18x18 ; Pins ; Virtual Pins ; Full Hierarchy Name                                                                      ; Library Name ;
 +-------------------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+------------------------------------------------------------------------------------------+--------------+
-; |computer                                 ; 4413 (34)         ; 599 (18)     ; 524288      ; 2            ; 0       ; 1         ; 87   ; 0            ; |computer                                                                                ;              ;
-;    |RAM:ram|                              ; 83 (0)            ; 4 (0)        ; 524288      ; 0            ; 0       ; 0         ; 0    ; 0            ; |computer|RAM:ram                                                                        ;              ;
-;       |altsyncram:ram_rtl_0|              ; 83 (0)            ; 4 (0)        ; 524288      ; 0            ; 0       ; 0         ; 0    ; 0            ; |computer|RAM:ram|altsyncram:ram_rtl_0                                                   ;              ;
-;          |altsyncram_7r22:auto_generated| ; 83 (0)            ; 4 (4)        ; 524288      ; 0            ; 0       ; 0         ; 0    ; 0            ; |computer|RAM:ram|altsyncram:ram_rtl_0|altsyncram_7r22:auto_generated                    ;              ;
+; |computer                                 ; 4552 (36)         ; 642 (27)     ; 524288      ; 2            ; 0       ; 1         ; 87   ; 0            ; |computer                                                                                ;              ;
+;    |RAM:ram|                              ; 81 (0)            ; 4 (0)        ; 524288      ; 0            ; 0       ; 0         ; 0    ; 0            ; |computer|RAM:ram                                                                        ;              ;
+;       |altsyncram:ram_rtl_0|              ; 81 (0)            ; 4 (0)        ; 524288      ; 0            ; 0       ; 0         ; 0    ; 0            ; |computer|RAM:ram|altsyncram:ram_rtl_0                                                   ;              ;
+;          |altsyncram_7r22:auto_generated| ; 81 (0)            ; 4 (4)        ; 524288      ; 0            ; 0       ; 0         ; 0    ; 0            ; |computer|RAM:ram|altsyncram:ram_rtl_0|altsyncram_7r22:auto_generated                    ;              ;
 ;             |decode_msa:decode2|          ; 4 (4)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |computer|RAM:ram|altsyncram:ram_rtl_0|altsyncram_7r22:auto_generated|decode_msa:decode2 ;              ;
 ;             |mux_lob:mux4|                ; 49 (49)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |computer|RAM:ram|altsyncram:ram_rtl_0|altsyncram_7r22:auto_generated|mux_lob:mux4       ;              ;
-;             |mux_lob:mux5|                ; 30 (30)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |computer|RAM:ram|altsyncram:ram_rtl_0|altsyncram_7r22:auto_generated|mux_lob:mux5       ;              ;
-;    |cpu:cpu|                              ; 3186 (2698)       ; 446 (321)    ; 0           ; 2            ; 0       ; 1         ; 0    ; 0            ; |computer|cpu:cpu                                                                        ;              ;
-;       |ALU:alu|                           ; 488 (335)         ; 125 (36)     ; 0           ; 2            ; 0       ; 1         ; 0    ; 0            ; |computer|cpu:cpu|ALU:alu                                                                ;              ;
+;             |mux_lob:mux5|                ; 28 (28)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |computer|RAM:ram|altsyncram:ram_rtl_0|altsyncram_7r22:auto_generated|mux_lob:mux5       ;              ;
+;    |cpu:cpu|                              ; 3304 (2817)       ; 456 (331)    ; 0           ; 2            ; 0       ; 1         ; 0    ; 0            ; |computer|cpu:cpu                                                                        ;              ;
+;       |ALU:alu|                           ; 487 (334)         ; 125 (36)     ; 0           ; 2            ; 0       ; 1         ; 0    ; 0            ; |computer|cpu:cpu|ALU:alu                                                                ;              ;
 ;          |div:div1|                       ; 153 (153)         ; 89 (89)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |computer|cpu:cpu|ALU:alu|div:div1                                                       ;              ;
 ;          |lpm_mult:Mult0|                 ; 0 (0)             ; 0 (0)        ; 0           ; 2            ; 0       ; 1         ; 0    ; 0            ; |computer|cpu:cpu|ALU:alu|lpm_mult:Mult0                                                 ;              ;
 ;             |mult_7dt:auto_generated|     ; 0 (0)             ; 0 (0)        ; 0           ; 2            ; 0       ; 1         ; 0    ; 0            ; |computer|cpu:cpu|ALU:alu|lpm_mult:Mult0|mult_7dt:auto_generated                         ;              ;
+;    |ps2_read:ps2|                         ; 15 (15)           ; 24 (24)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |computer|ps2_read:ps2                                                                   ;              ;
 ;    |rx_serial:rsr|                        ; 63 (63)           ; 34 (34)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |computer|rx_serial:rsr                                                                  ;              ;
 ;    |tx_serial:tsr|                        ; 39 (39)           ; 25 (25)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |computer|tx_serial:tsr                                                                  ;              ;
-;    |vga_320x240:vga1|                     ; 155 (155)         ; 52 (52)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |computer|vga_320x240:vga1                                                               ;              ;
-;    |vga_module:vga0|                      ; 853 (124)         ; 20 (20)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |computer|vga_module:vga0                                                                ;              ;
-;       |chars:chars_1|                     ; 729 (729)         ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |computer|vga_module:vga0|chars:chars_1                                                  ;              ;
+;    |vga_320x240:vga1|                     ; 145 (145)         ; 52 (52)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |computer|vga_320x240:vga1                                                               ;              ;
+;    |vga_module:vga0|                      ; 869 (120)         ; 20 (20)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |computer|vga_module:vga0                                                                ;              ;
+;       |chars:chars_1|                     ; 749 (749)         ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |computer|vga_module:vga0|chars:chars_1                                                  ;              ;
 +-------------------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+------------------------------------------------------------------------------------------+--------------+
 Note: For table entries with two numbers listed, the numbers in parentheses indicate the number of resources of the given type used by the specific entity alone. The numbers listed outside of parentheses indicate the total resources of the given type used by the specific entity and all of its sub-entities in the hierarchy.
 
@@ -335,7 +337,7 @@ Encoding Type:  One-Hot
 +-----------------------------------------+-----------------------------------------+
 ; Register name                           ; Reason for Removal                      ;
 +-----------------------------------------+-----------------------------------------+
-; cpu:cpu|noirq[2..7]                     ; Stuck at GND due to stuck port data_in  ;
+; cpu:cpu|noirq[3..7]                     ; Stuck at GND due to stuck port data_in  ;
 ; vga_320x240:vga1|rd                     ; Stuck at VCC due to stuck port data_in  ;
 ; vga_module:vga0|rd                      ; Stuck at VCC due to stuck port data_in  ;
 ; RAM:ram|data2[0]~en                     ; Lost fanout                             ;
@@ -349,7 +351,6 @@ Encoding Type:  One-Hot
 ; RAM:ram|data2[8]~en                     ; Lost fanout                             ;
 ; RAM:ram|data2[9]~en                     ; Lost fanout                             ;
 ; RAM:ram|data2[10]~en                    ; Lost fanout                             ;
-; RAM:ram|data2[11]~en                    ; Lost fanout                             ;
 ; RAM:ram|data2[12]~en                    ; Lost fanout                             ;
 ; RAM:ram|data2[13]~en                    ; Lost fanout                             ;
 ; RAM:ram|data2[14]~en                    ; Lost fanout                             ;
@@ -371,7 +372,7 @@ Encoding Type:  One-Hot
 ; RAM:ram|data[13]~en                     ; Lost fanout                             ;
 ; RAM:ram|data[14]~en                     ; Lost fanout                             ;
 ; RAM:ram|data[15]~en                     ; Lost fanout                             ;
-; irq[2..7]                               ; Stuck at GND due to stuck port data_in  ;
+; irq[3..7]                               ; Stuck at GND due to stuck port data_in  ;
 ; cpu:cpu|ALU:alu|result[15]              ; Merged with cpu:cpu|ALU:alu|flags[3]    ;
 ; cpu:cpu|ALU:alu|tmp[15]                 ; Merged with cpu:cpu|ALU:alu|flags[3]    ;
 ; cpu:cpu|ALU:alu|tmp[16]                 ; Merged with cpu:cpu|ALU:alu|flags[1]    ;
@@ -413,7 +414,6 @@ Encoding Type:  One-Hot
 ; vga_module:vga0|x[8]                    ; Merged with vga_320x240:vga1|x[8]       ;
 ; vga_module:vga0|x[9]                    ; Merged with vga_320x240:vga1|x[9]       ;
 ; cpu:cpu|irq_count[10]                   ; Stuck at GND due to stuck port data_in  ;
-; vga_module:vga0|addr[14]                ; Stuck at GND due to stuck port data_in  ;
 ; rx_serial:rsr|state~6                   ; Lost fanout                             ;
 ; rx_serial:rsr|state~7                   ; Lost fanout                             ;
 ; rx_serial:rsr|state~8                   ; Lost fanout                             ;
@@ -436,17 +436,18 @@ Encoding Type:  One-Hot
 ; cpu:cpu|mc_count~17                     ; Lost fanout                             ;
 ; vga_module:vga0|mem_read                ; Merged with vga_320x240:vga1|mem_read   ;
 ; vga_module:vga0|curr_char[8]            ; Merged with vga_320x240:vga1|pixels[8]  ;
+; vga_module:vga0|curr_char[12]           ; Merged with vga_320x240:vga1|pixels[12] ;
 ; vga_module:vga0|curr_char[0]            ; Merged with vga_320x240:vga1|pixels[0]  ;
 ; vga_module:vga0|curr_char[1]            ; Merged with vga_320x240:vga1|pixels[1]  ;
 ; vga_module:vga0|curr_char[2]            ; Merged with vga_320x240:vga1|pixels[2]  ;
 ; vga_module:vga0|curr_char[4]            ; Merged with vga_320x240:vga1|pixels[4]  ;
 ; vga_module:vga0|curr_char[5]            ; Merged with vga_320x240:vga1|pixels[5]  ;
 ; vga_module:vga0|curr_char[6]            ; Merged with vga_320x240:vga1|pixels[6]  ;
+; vga_module:vga0|curr_char[14]           ; Merged with vga_320x240:vga1|pixels[14] ;
 ; vga_module:vga0|curr_char[10]           ; Merged with vga_320x240:vga1|pixels[10] ;
 ; vga_module:vga0|curr_char[9]            ; Merged with vga_320x240:vga1|pixels[9]  ;
-; vga_module:vga0|curr_char[12]           ; Merged with vga_320x240:vga1|pixels[12] ;
 ; vga_module:vga0|curr_char[13]           ; Merged with vga_320x240:vga1|pixels[13] ;
-; Total Number of Removed Registers = 133 ;                                         ;
+; Total Number of Removed Registers = 130 ;                                         ;
 +-----------------------------------------+-----------------------------------------+
 
 
@@ -467,12 +468,12 @@ Encoding Type:  One-Hot
 +----------------------------------------------+-------+
 ; Statistic                                    ; Value ;
 +----------------------------------------------+-------+
-; Total registers                              ; 599   ;
-; Number of registers using Synchronous Clear  ; 147   ;
-; Number of registers using Synchronous Load   ; 135   ;
-; Number of registers using Asynchronous Clear ; 0     ;
+; Total registers                              ; 642   ;
+; Number of registers using Synchronous Clear  ; 100   ;
+; Number of registers using Synchronous Load   ; 86    ;
+; Number of registers using Asynchronous Clear ; 24    ;
 ; Number of registers using Asynchronous Load  ; 0     ;
-; Number of registers using Clock Enable       ; 516   ;
+; Number of registers using Clock Enable       ; 546   ;
 ; Number of registers using Preset             ; 0     ;
 +----------------------------------------------+-------+
 
@@ -482,8 +483,8 @@ Encoding Type:  One-Hot
 +----------------------------------------+---------+
 ; Inverted Register                      ; Fan out ;
 +----------------------------------------+---------+
-; timer_reset                            ; 41      ;
-; cpu:cpu|memrd                          ; 16      ;
+; timer_reset                            ; 47      ;
+; cpu:cpu|memrd                          ; 18      ;
 ; rx_serial:rsr|rx2                      ; 2       ;
 ; rx_serial:rsr|rx1                      ; 2       ;
 ; rx_serial:rsr|rx3                      ; 1       ;
@@ -523,7 +524,6 @@ Encoding Type:  One-Hot
 ; RAM:ram|data2[8]~reg0  ; RAM:ram|ram_rtl_0 ; RAM  ;
 ; RAM:ram|data2[9]~reg0  ; RAM:ram|ram_rtl_0 ; RAM  ;
 ; RAM:ram|data2[10]~reg0 ; RAM:ram|ram_rtl_0 ; RAM  ;
-; RAM:ram|data2[11]~reg0 ; RAM:ram|ram_rtl_0 ; RAM  ;
 ; RAM:ram|data2[12]~reg0 ; RAM:ram|ram_rtl_0 ; RAM  ;
 ; RAM:ram|data2[13]~reg0 ; RAM:ram|ram_rtl_0 ; RAM  ;
 ; RAM:ram|data2[14]~reg0 ; RAM:ram|ram_rtl_0 ; RAM  ;
@@ -535,64 +535,65 @@ Encoding Type:  One-Hot
 +--------------------+-----------+---------------+----------------------+------------------------+------------+-----------------------------------------+
 ; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered ; Example Multiplexer Output              ;
 +--------------------+-----------+---------------+----------------------+------------------------+------------+-----------------------------------------+
-; 3:1                ; 23 bits   ; 46 LEs        ; 23 LEs               ; 23 LEs                 ; Yes        ; |computer|cpu:cpu|ALU:alu|div:div1|A[3] ;
-; 3:1                ; 7 bits    ; 14 LEs        ; 7 LEs                ; 7 LEs                  ; Yes        ; |computer|reset_counter[1]              ;
-; 4:1                ; 8 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |computer|rx_serial:rsr|char1[5]        ;
-; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; Yes        ; |computer|cpu:cpu|irq_count[0]          ;
-; 4:1                ; 15 bits   ; 30 LEs        ; 30 LEs               ; 0 LEs                  ; Yes        ; |computer|cpu:cpu|ALU:alu|div:div1|Q[3] ;
-; 4:1                ; 10 bits   ; 20 LEs        ; 10 LEs               ; 10 LEs                 ; Yes        ; |computer|vga_320x240:vga1|x[0]         ;
-; 5:1                ; 13 bits   ; 39 LEs        ; 13 LEs               ; 26 LEs                 ; Yes        ; |computer|tx_serial:tsr|counter[1]      ;
-; 5:1                ; 10 bits   ; 30 LEs        ; 10 LEs               ; 20 LEs                 ; Yes        ; |computer|vga_320x240:vga1|y[9]         ;
-; 17:1               ; 16 bits   ; 176 LEs       ; 16 LEs               ; 160 LEs                ; Yes        ; |computer|cpu:cpu|ALU:alu|high[8]       ;
+; 4:1                ; 4 bits    ; 8 LEs         ; 4 LEs                ; 4 LEs                  ; Yes        ; |computer|ps2_read:ps2|n_reg[0]         ;
+; 3:1                ; 23 bits   ; 46 LEs        ; 23 LEs               ; 23 LEs                 ; Yes        ; |computer|cpu:cpu|ALU:alu|div:div1|n[2] ;
+; 3:1                ; 7 bits    ; 14 LEs        ; 7 LEs                ; 7 LEs                  ; Yes        ; |computer|reset_counter[2]              ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |computer|rx_serial:rsr|char1[0]        ;
+; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; Yes        ; |computer|cpu:cpu|irq_count[1]          ;
+; 4:1                ; 15 bits   ; 30 LEs        ; 30 LEs               ; 0 LEs                  ; Yes        ; |computer|cpu:cpu|ALU:alu|div:div1|Q[7] ;
+; 4:1                ; 10 bits   ; 20 LEs        ; 10 LEs               ; 10 LEs                 ; Yes        ; |computer|vga_320x240:vga1|x[6]         ;
+; 5:1                ; 13 bits   ; 39 LEs        ; 13 LEs               ; 26 LEs                 ; Yes        ; |computer|tx_serial:tsr|counter[11]     ;
+; 5:1                ; 10 bits   ; 30 LEs        ; 10 LEs               ; 20 LEs                 ; Yes        ; |computer|vga_320x240:vga1|y[1]         ;
+; 17:1               ; 16 bits   ; 176 LEs       ; 16 LEs               ; 160 LEs                ; Yes        ; |computer|cpu:cpu|ALU:alu|high[2]       ;
 ; 6:1                ; 4 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |computer|tx_serial:tsr|state[3]        ;
 ; 7:1                ; 4 bits    ; 16 LEs        ; 4 LEs                ; 12 LEs                 ; Yes        ; |computer|vga_320x240:vga1|addr[1]      ;
 ; 8:1                ; 4 bits    ; 20 LEs        ; 4 LEs                ; 16 LEs                 ; Yes        ; |computer|vga_module:vga0|addr[0]       ;
-; 8:1                ; 10 bits   ; 50 LEs        ; 20 LEs               ; 30 LEs                 ; Yes        ; |computer|vga_module:vga0|addr[11]      ;
-; 8:1                ; 11 bits   ; 55 LEs        ; 22 LEs               ; 33 LEs                 ; Yes        ; |computer|vga_320x240:vga1|addr[14]     ;
+; 8:1                ; 11 bits   ; 55 LEs        ; 22 LEs               ; 33 LEs                 ; Yes        ; |computer|vga_module:vga0|addr[7]       ;
+; 8:1                ; 11 bits   ; 55 LEs        ; 22 LEs               ; 33 LEs                 ; Yes        ; |computer|vga_320x240:vga1|addr[13]     ;
 ; 7:1                ; 13 bits   ; 52 LEs        ; 13 LEs               ; 39 LEs                 ; Yes        ; |computer|rx_serial:rsr|rx_counter[10]  ;
-; 27:1               ; 4 bits    ; 72 LEs        ; 8 LEs                ; 64 LEs                 ; Yes        ; |computer|cpu:cpu|f[3]                  ;
-; 40:1               ; 8 bits    ; 208 LEs       ; 24 LEs               ; 184 LEs                ; Yes        ; |computer|cpu:cpu|regs[7][15]           ;
+; 27:1               ; 4 bits    ; 72 LEs        ; 8 LEs                ; 64 LEs                 ; Yes        ; |computer|cpu:cpu|f[2]                  ;
+; 40:1               ; 8 bits    ; 208 LEs       ; 24 LEs               ; 184 LEs                ; Yes        ; |computer|cpu:cpu|regs[7][13]           ;
 ; 40:1               ; 8 bits    ; 208 LEs       ; 24 LEs               ; 184 LEs                ; Yes        ; |computer|cpu:cpu|regs[6][8]            ;
-; 40:1               ; 8 bits    ; 208 LEs       ; 24 LEs               ; 184 LEs                ; Yes        ; |computer|cpu:cpu|regs[5][11]           ;
-; 40:1               ; 8 bits    ; 208 LEs       ; 24 LEs               ; 184 LEs                ; Yes        ; |computer|cpu:cpu|regs[4][14]           ;
-; 40:1               ; 8 bits    ; 208 LEs       ; 24 LEs               ; 184 LEs                ; Yes        ; |computer|cpu:cpu|regs[3][11]           ;
-; 40:1               ; 8 bits    ; 208 LEs       ; 24 LEs               ; 184 LEs                ; Yes        ; |computer|cpu:cpu|regs[2][8]            ;
-; 40:1               ; 8 bits    ; 208 LEs       ; 24 LEs               ; 184 LEs                ; Yes        ; |computer|cpu:cpu|regs[1][15]           ;
-; 40:1               ; 8 bits    ; 208 LEs       ; 24 LEs               ; 184 LEs                ; Yes        ; |computer|cpu:cpu|regs[0][9]            ;
-; 44:1               ; 8 bits    ; 232 LEs       ; 32 LEs               ; 200 LEs                ; Yes        ; |computer|cpu:cpu|regs[9][12]           ;
-; 44:1               ; 7 bits    ; 203 LEs       ; 28 LEs               ; 175 LEs                ; Yes        ; |computer|cpu:cpu|regs[7][3]            ;
-; 44:1               ; 7 bits    ; 203 LEs       ; 28 LEs               ; 175 LEs                ; Yes        ; |computer|cpu:cpu|regs[6][1]            ;
-; 44:1               ; 7 bits    ; 203 LEs       ; 28 LEs               ; 175 LEs                ; Yes        ; |computer|cpu:cpu|regs[5][1]            ;
-; 44:1               ; 7 bits    ; 203 LEs       ; 28 LEs               ; 175 LEs                ; Yes        ; |computer|cpu:cpu|regs[4][7]            ;
-; 44:1               ; 7 bits    ; 203 LEs       ; 28 LEs               ; 175 LEs                ; Yes        ; |computer|cpu:cpu|regs[3][1]            ;
-; 44:1               ; 7 bits    ; 203 LEs       ; 28 LEs               ; 175 LEs                ; Yes        ; |computer|cpu:cpu|regs[2][1]            ;
-; 44:1               ; 7 bits    ; 203 LEs       ; 28 LEs               ; 175 LEs                ; Yes        ; |computer|cpu:cpu|regs[1][1]            ;
-; 44:1               ; 7 bits    ; 203 LEs       ; 28 LEs               ; 175 LEs                ; Yes        ; |computer|cpu:cpu|regs[0][5]            ;
-; 48:1               ; 7 bits    ; 224 LEs       ; 35 LEs               ; 189 LEs                ; Yes        ; |computer|cpu:cpu|regs[9][5]            ;
-; 44:1               ; 16 bits   ; 464 LEs       ; 64 LEs               ; 400 LEs                ; Yes        ; |computer|cpu:cpu|mbr[15]               ;
-; 57:1               ; 4 bits    ; 152 LEs       ; 16 LEs               ; 136 LEs                ; Yes        ; |computer|cpu:cpu|data_to_write[6]      ;
-; 57:1               ; 8 bits    ; 304 LEs       ; 48 LEs               ; 256 LEs                ; Yes        ; |computer|cpu:cpu|data_to_write[8]      ;
-; 59:1               ; 3 bits    ; 117 LEs       ; 15 LEs               ; 102 LEs                ; Yes        ; |computer|cpu:cpu|data_to_write[1]      ;
+; 40:1               ; 8 bits    ; 208 LEs       ; 24 LEs               ; 184 LEs                ; Yes        ; |computer|cpu:cpu|regs[5][12]           ;
+; 40:1               ; 8 bits    ; 208 LEs       ; 24 LEs               ; 184 LEs                ; Yes        ; |computer|cpu:cpu|regs[4][10]           ;
+; 40:1               ; 8 bits    ; 208 LEs       ; 24 LEs               ; 184 LEs                ; Yes        ; |computer|cpu:cpu|regs[3][8]            ;
+; 40:1               ; 8 bits    ; 208 LEs       ; 24 LEs               ; 184 LEs                ; Yes        ; |computer|cpu:cpu|regs[2][10]           ;
+; 40:1               ; 8 bits    ; 208 LEs       ; 24 LEs               ; 184 LEs                ; Yes        ; |computer|cpu:cpu|regs[1][8]            ;
+; 40:1               ; 8 bits    ; 208 LEs       ; 24 LEs               ; 184 LEs                ; Yes        ; |computer|cpu:cpu|regs[0][12]           ;
+; 44:1               ; 8 bits    ; 232 LEs       ; 32 LEs               ; 200 LEs                ; Yes        ; |computer|cpu:cpu|regs[9][9]            ;
+; 46:1               ; 7 bits    ; 210 LEs       ; 35 LEs               ; 175 LEs                ; Yes        ; |computer|cpu:cpu|regs[7][6]            ;
+; 46:1               ; 7 bits    ; 210 LEs       ; 35 LEs               ; 175 LEs                ; Yes        ; |computer|cpu:cpu|regs[6][2]            ;
+; 46:1               ; 7 bits    ; 210 LEs       ; 35 LEs               ; 175 LEs                ; Yes        ; |computer|cpu:cpu|regs[5][4]            ;
+; 46:1               ; 7 bits    ; 210 LEs       ; 35 LEs               ; 175 LEs                ; Yes        ; |computer|cpu:cpu|regs[4][6]            ;
+; 46:1               ; 7 bits    ; 210 LEs       ; 35 LEs               ; 175 LEs                ; Yes        ; |computer|cpu:cpu|regs[3][2]            ;
+; 46:1               ; 7 bits    ; 210 LEs       ; 35 LEs               ; 175 LEs                ; Yes        ; |computer|cpu:cpu|regs[2][4]            ;
+; 46:1               ; 7 bits    ; 210 LEs       ; 35 LEs               ; 175 LEs                ; Yes        ; |computer|cpu:cpu|regs[1][6]            ;
+; 46:1               ; 7 bits    ; 210 LEs       ; 35 LEs               ; 175 LEs                ; Yes        ; |computer|cpu:cpu|regs[0][6]            ;
+; 50:1               ; 7 bits    ; 231 LEs       ; 42 LEs               ; 189 LEs                ; Yes        ; |computer|cpu:cpu|regs[9][7]            ;
+; 44:1               ; 16 bits   ; 464 LEs       ; 64 LEs               ; 400 LEs                ; Yes        ; |computer|cpu:cpu|mbr[0]                ;
+; 57:1               ; 4 bits    ; 152 LEs       ; 16 LEs               ; 136 LEs                ; Yes        ; |computer|cpu:cpu|data_to_write[4]      ;
+; 57:1               ; 8 bits    ; 304 LEs       ; 48 LEs               ; 256 LEs                ; Yes        ; |computer|cpu:cpu|data_to_write[15]     ;
+; 59:1               ; 3 bits    ; 117 LEs       ; 15 LEs               ; 102 LEs                ; Yes        ; |computer|cpu:cpu|data_to_write[3]      ;
 ; 44:1               ; 4 bits    ; 116 LEs       ; 28 LEs               ; 88 LEs                 ; Yes        ; |computer|cpu:cpu|ir[3]                 ;
 ; 44:1               ; 8 bits    ; 232 LEs       ; 8 LEs                ; 224 LEs                ; Yes        ; |computer|cpu:cpu|ir[11]                ;
-; 55:1               ; 15 bits   ; 540 LEs       ; 105 LEs              ; 435 LEs                ; Yes        ; |computer|cpu:cpu|pc[4]                 ;
-; 60:1               ; 8 bits    ; 320 LEs       ; 32 LEs               ; 288 LEs                ; Yes        ; |computer|cpu:cpu|regs[8][13]           ;
-; 64:1               ; 7 bits    ; 294 LEs       ; 42 LEs               ; 252 LEs                ; Yes        ; |computer|cpu:cpu|regs[8][3]            ;
-; 142:1              ; 15 bits   ; 1410 LEs      ; 210 LEs              ; 1200 LEs               ; Yes        ; |computer|cpu:cpu|addr[13]              ;
-; 3:1                ; 3 bits    ; 6 LEs         ; 6 LEs                ; 0 LEs                  ; Yes        ; |computer|vga_module:vga0|r             ;
-; 5:1                ; 3 bits    ; 9 LEs         ; 9 LEs                ; 0 LEs                  ; Yes        ; |computer|vga_320x240:vga1|g            ;
-; 20:1               ; 8 bits    ; 104 LEs       ; 16 LEs               ; 88 LEs                 ; Yes        ; |computer|cpu:cpu|alu_b[15]             ;
-; 25:1               ; 8 bits    ; 128 LEs       ; 16 LEs               ; 112 LEs                ; Yes        ; |computer|cpu:cpu|alu_b[2]              ;
+; 56:1               ; 15 bits   ; 555 LEs       ; 120 LEs              ; 435 LEs                ; Yes        ; |computer|cpu:cpu|pc[3]                 ;
+; 60:1               ; 8 bits    ; 320 LEs       ; 32 LEs               ; 288 LEs                ; Yes        ; |computer|cpu:cpu|regs[8][14]           ;
+; 66:1               ; 7 bits    ; 308 LEs       ; 42 LEs               ; 266 LEs                ; Yes        ; |computer|cpu:cpu|regs[8][6]            ;
+; 143:1              ; 15 bits   ; 1425 LEs      ; 210 LEs              ; 1215 LEs               ; Yes        ; |computer|cpu:cpu|addr[2]               ;
+; 3:1                ; 3 bits    ; 6 LEs         ; 6 LEs                ; 0 LEs                  ; Yes        ; |computer|vga_module:vga0|b             ;
+; 5:1                ; 3 bits    ; 9 LEs         ; 9 LEs                ; 0 LEs                  ; Yes        ; |computer|vga_320x240:vga1|b            ;
+; 20:1               ; 8 bits    ; 104 LEs       ; 16 LEs               ; 88 LEs                 ; Yes        ; |computer|cpu:cpu|alu_b[11]             ;
+; 25:1               ; 8 bits    ; 128 LEs       ; 16 LEs               ; 112 LEs                ; Yes        ; |computer|cpu:cpu|alu_b[1]              ;
 ; 3:1                ; 5 bits    ; 10 LEs        ; 5 LEs                ; 5 LEs                  ; No         ; |computer|rx_serial:rsr|rx_bit_count    ;
 ; 4:1                ; 15 bits   ; 30 LEs        ; 15 LEs               ; 15 LEs                 ; No         ; |computer|cpu:cpu|Mux40                 ;
-; 16:1               ; 16 bits   ; 160 LEs       ; 112 LEs              ; 48 LEs                 ; No         ; |computer|cpu:cpu|Mux361                ;
-; 16:1               ; 16 bits   ; 160 LEs       ; 112 LEs              ; 48 LEs                 ; No         ; |computer|cpu:cpu|Mux371                ;
+; 16:1               ; 16 bits   ; 160 LEs       ; 112 LEs              ; 48 LEs                 ; No         ; |computer|cpu:cpu|Mux360                ;
+; 16:1               ; 16 bits   ; 160 LEs       ; 112 LEs              ; 48 LEs                 ; No         ; |computer|cpu:cpu|Mux370                ;
 ; 10:1               ; 4 bits    ; 24 LEs        ; 16 LEs               ; 8 LEs                  ; No         ; |computer|rx_serial:rsr|state           ;
-; 24:1               ; 4 bits    ; 64 LEs        ; 32 LEs               ; 32 LEs                 ; No         ; |computer|cpu:cpu|ALU:alu|Mux11         ;
-; 24:1               ; 4 bits    ; 64 LEs        ; 32 LEs               ; 32 LEs                 ; No         ; |computer|cpu:cpu|ALU:alu|Mux5          ;
-; 25:1               ; 2 bits    ; 32 LEs        ; 20 LEs               ; 12 LEs                 ; No         ; |computer|cpu:cpu|ALU:alu|Mux14         ;
-; 25:1               ; 2 bits    ; 32 LEs        ; 20 LEs               ; 12 LEs                 ; No         ; |computer|cpu:cpu|ALU:alu|Mux2          ;
-; 15:1               ; 15 bits   ; 150 LEs       ; 15 LEs               ; 135 LEs                ; No         ; |computer|cpu:cpu|Mux224                ;
+; 24:1               ; 4 bits    ; 64 LEs        ; 32 LEs               ; 32 LEs                 ; No         ; |computer|cpu:cpu|ALU:alu|Mux12         ;
+; 24:1               ; 4 bits    ; 64 LEs        ; 32 LEs               ; 32 LEs                 ; No         ; |computer|cpu:cpu|ALU:alu|Mux4          ;
+; 25:1               ; 2 bits    ; 32 LEs        ; 20 LEs               ; 12 LEs                 ; No         ; |computer|cpu:cpu|ALU:alu|Mux13         ;
+; 25:1               ; 2 bits    ; 32 LEs        ; 20 LEs               ; 12 LEs                 ; No         ; |computer|cpu:cpu|ALU:alu|Mux3          ;
+; 15:1               ; 15 bits   ; 150 LEs       ; 15 LEs               ; 135 LEs                ; No         ; |computer|cpu:cpu|Mux216                ;
 +--------------------+-----------+---------------+----------------------+------------------------+------------+-----------------------------------------+
 
 
@@ -827,9 +828,11 @@ Note: In order to hide this table in the UI and the text report file, please set
 Info: *******************************************************************
 Info: Running Quartus II 64-Bit Analysis & Synthesis
     Info: Version 13.0.0 Build 156 04/24/2013 SJ Web Edition
-    Info: Processing started: Sat Aug 25 11:50:12 2018
+    Info: Processing started: Wed Aug 29 23:19:23 2018
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off computer -c computer
 Warning (20028): Parallel compilation is not licensed and has been disabled
+Info (12021): Found 1 design units, including 1 entities, in source file ps2_read.v
+    Info (12023): Found entity 1: ps2_read
 Info (12021): Found 1 design units, including 1 entities, in source file vga_320x240.v
     Info (12023): Found entity 1: vga_320x240
 Info (12021): Found 1 design units, including 1 entities, in source file computer.v
@@ -851,7 +854,7 @@ Info (12021): Found 1 design units, including 1 entities, in source file div.v
 Info (12021): Found 1 design units, including 1 entities, in source file alu.v
     Info (12023): Found entity 1: ALU
 Info (12127): Elaborating entity "computer" for the top level hierarchy
-Warning (10036): Verilog HDL or VHDL warning at computer.v(201): object "txoe" assigned a value but never read
+Warning (10036): Verilog HDL or VHDL warning at computer.v(219): object "txoe" assigned a value but never read
 Info (12128): Elaborating entity "vga_module" for hierarchy "vga_module:vga0"
 Warning (10230): Verilog HDL assignment warning at vga_module.v(130): truncated value with size 32 to match size of target (16)
 Warning (10230): Verilog HDL assignment warning at vga_module.v(138): truncated value with size 32 to match size of target (16)
@@ -866,80 +869,82 @@ Warning (10230): Verilog HDL assignment warning at vga_320x240.v(146): truncated
 Info (12128): Elaborating entity "RAM" for hierarchy "RAM:ram"
 Warning (10850): Verilog HDL warning at RAM.v(45): number of words (348) in memory file does not match the number of elements in the address range [0:32767]
 Info (12128): Elaborating entity "cpu" for hierarchy "cpu:cpu"
-Warning (10036): Verilog HDL or VHDL warning at cpu.v(79): object "halt" assigned a value but never read
-Info (10264): Verilog HDL Case Statement information at cpu.v(294): all case item expressions in this case statement are onehot
-Warning (10230): Verilog HDL assignment warning at cpu.v(327): truncated value with size 16 to match size of target (8)
-Warning (10230): Verilog HDL assignment warning at cpu.v(331): truncated value with size 16 to match size of target (8)
-Warning (10230): Verilog HDL assignment warning at cpu.v(334): truncated value with size 16 to match size of target (2)
-Info (10264): Verilog HDL Case Statement information at cpu.v(322): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(355): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(383): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(420): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(443): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(468): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(705): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(738): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(777): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(816): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(855): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(894): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(933): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(972): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(1011): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(1050): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(1089): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(1133): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(1155): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(1178): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(1201): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(1231): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(1262): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(1293): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(1320): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(1354): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(1388): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(1428): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(1469): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(1524): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(1561): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(1599): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(1641): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(1684): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(1727): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(1775): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(1825): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(1874): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(1925): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(1977): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(2033): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(2090): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(2147): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(2209): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(2273): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(2340): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(2368): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(2411): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(2456): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(2501): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(2558): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(2615): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(2677): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(2696): all case item expressions in this case statement are onehot
+Warning (10036): Verilog HDL or VHDL warning at cpu.v(80): object "halt" assigned a value but never read
+Info (10264): Verilog HDL Case Statement information at cpu.v(308): all case item expressions in this case statement are onehot
+Warning (10230): Verilog HDL assignment warning at cpu.v(344): truncated value with size 16 to match size of target (8)
+Warning (10230): Verilog HDL assignment warning at cpu.v(348): truncated value with size 16 to match size of target (8)
+Warning (10230): Verilog HDL assignment warning at cpu.v(351): truncated value with size 16 to match size of target (2)
+Info (10264): Verilog HDL Case Statement information at cpu.v(339): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(372): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(400): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(437): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(460): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(485): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(725): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(758): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(797): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(836): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(875): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(914): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(953): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(992): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(1031): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(1070): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(1109): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(1153): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(1175): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(1198): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(1221): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(1251): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(1282): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(1313): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(1340): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(1374): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(1408): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(1448): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(1489): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(1544): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(1581): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(1619): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(1661): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(1704): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(1747): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(1795): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(1845): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(1894): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(1945): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(1997): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(2053): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(2110): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(2167): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(2229): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(2293): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(2360): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(2388): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(2431): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(2476): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(2521): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(2578): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(2635): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(2697): all case item expressions in this case statement are onehot
 Info (10264): Verilog HDL Case Statement information at cpu.v(2716): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(2741): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(2766): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(2791): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(2823): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(2855): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(2887): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(2909): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(2946): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(2985): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(3024): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(3074): all case item expressions in this case statement are onehot
-Info (10264): Verilog HDL Case Statement information at cpu.v(3125): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(2736): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(2761): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(2786): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(2811): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(2843): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(2875): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(2907): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(2929): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(2966): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(3005): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(3044): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(3094): all case item expressions in this case statement are onehot
+Info (10264): Verilog HDL Case Statement information at cpu.v(3145): all case item expressions in this case statement are onehot
 Info (12128): Elaborating entity "ALU" for hierarchy "cpu:cpu|ALU:alu"
 Info (12128): Elaborating entity "div" for hierarchy "cpu:cpu|ALU:alu|div:div1"
+Info (12128): Elaborating entity "ps2_read" for hierarchy "ps2_read:ps2"
+Warning (10230): Verilog HDL assignment warning at ps2_read.v(90): truncated value with size 32 to match size of target (4)
 Info (12128): Elaborating entity "rx_serial" for hierarchy "rx_serial:rsr"
 Warning (10036): Verilog HDL or VHDL warning at rx_serial.v(23): object "rx4" assigned a value but never read
 Info (12128): Elaborating entity "tx_serial" for hierarchy "tx_serial:tsr"
@@ -967,6 +972,14 @@ Warning (13046): Tri-state node(s) do not directly drive top-level pin(s)
     Warning (13049): Converted tri-state buffer "rx_serial:rsr|rx_data[5]" feeding internal logic into a wire
     Warning (13049): Converted tri-state buffer "rx_serial:rsr|rx_data[6]" feeding internal logic into a wire
     Warning (13049): Converted tri-state buffer "rx_serial:rsr|rx_data[7]" feeding internal logic into a wire
+    Warning (13049): Converted tri-state buffer "ps2_read:ps2|rx_data[0]" feeding internal logic into a wire
+    Warning (13049): Converted tri-state buffer "ps2_read:ps2|rx_data[7]" feeding internal logic into a wire
+    Warning (13049): Converted tri-state buffer "ps2_read:ps2|rx_data[6]" feeding internal logic into a wire
+    Warning (13049): Converted tri-state buffer "ps2_read:ps2|rx_data[5]" feeding internal logic into a wire
+    Warning (13049): Converted tri-state buffer "ps2_read:ps2|rx_data[4]" feeding internal logic into a wire
+    Warning (13049): Converted tri-state buffer "ps2_read:ps2|rx_data[3]" feeding internal logic into a wire
+    Warning (13049): Converted tri-state buffer "ps2_read:ps2|rx_data[2]" feeding internal logic into a wire
+    Warning (13049): Converted tri-state buffer "ps2_read:ps2|rx_data[1]" feeding internal logic into a wire
     Warning (13049): Converted tri-state buffer "RAM:ram|data2[0]" feeding internal logic into a wire
     Warning (13049): Converted tri-state buffer "RAM:ram|data2[1]" feeding internal logic into a wire
     Warning (13049): Converted tri-state buffer "RAM:ram|data2[2]" feeding internal logic into a wire
@@ -978,7 +991,6 @@ Warning (13046): Tri-state node(s) do not directly drive top-level pin(s)
     Warning (13049): Converted tri-state buffer "RAM:ram|data2[8]" feeding internal logic into a wire
     Warning (13049): Converted tri-state buffer "RAM:ram|data2[9]" feeding internal logic into a wire
     Warning (13049): Converted tri-state buffer "RAM:ram|data2[10]" feeding internal logic into a wire
-    Warning (13049): Converted tri-state buffer "RAM:ram|data2[11]" feeding internal logic into a wire
     Warning (13049): Converted tri-state buffer "RAM:ram|data2[12]" feeding internal logic into a wire
     Warning (13049): Converted tri-state buffer "RAM:ram|data2[13]" feeding internal logic into a wire
     Warning (13049): Converted tri-state buffer "RAM:ram|data2[14]" feeding internal logic into a wire
@@ -1067,6 +1079,8 @@ Warning (13034): The following nodes have both tri-state and non-tri-state drive
     Warning (13035): Inserted always-enabled tri-state buffer between "gpio0[25]" and its non-tri-state driver.
 Warning (13039): The following bidir pins have no drivers
     Warning (13040): Bidir "gpio0[27]" has no driver
+    Warning (13040): Bidir "gpio0[31]" has no driver
+    Warning (13040): Bidir "gpio0[33]" has no driver
     Warning (13040): Bidir "gpio0[2]" has no driver
     Warning (13040): Bidir "gpio0[4]" has no driver
     Warning (13040): Bidir "gpio0[6]" has no driver
@@ -1091,9 +1105,7 @@ Warning (13039): The following bidir pins have no drivers
     Warning (13040): Bidir "gpio0[28]" has no driver
     Warning (13040): Bidir "gpio0[29]" has no driver
     Warning (13040): Bidir "gpio0[30]" has no driver
-    Warning (13040): Bidir "gpio0[31]" has no driver
     Warning (13040): Bidir "gpio0[32]" has no driver
-    Warning (13040): Bidir "gpio0[33]" has no driver
     Warning (13040): Bidir "gpio1[0]" has no driver
     Warning (13040): Bidir "gpio1[1]" has no driver
     Warning (13040): Bidir "gpio1[2]" has no driver
@@ -1131,7 +1143,7 @@ Warning (13039): The following bidir pins have no drivers
 Warning (13009): TRI or OPNDRN buffers permanently enabled
     Warning (13010): Node "gpio0[25]~synth"
 Info (286030): Timing-Driven Synthesis is running
-Info (17049): 53 registers lost all their fanouts during netlist optimizations.
+Info (17049): 52 registers lost all their fanouts during netlist optimizations.
 Info (144001): Generated suppressed messages file C:/Prj/Altera/computer3/computer.map.smsg
 Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
     Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
@@ -1144,18 +1156,18 @@ Warning (21074): Design contains 8 input pin(s) that do not drive logic
     Warning (15610): No output dependent on input pin "gpio0_IN[1]"
     Warning (15610): No output dependent on input pin "gpio1_IN[0]"
     Warning (15610): No output dependent on input pin "gpio1_IN[1]"
-Info (21057): Implemented 4642 device resources after synthesis - the final resource count might be different
+Info (21057): Implemented 4815 device resources after synthesis - the final resource count might be different
     Info (21058): Implemented 11 input pins
     Info (21059): Implemented 8 output pins
     Info (21060): Implemented 68 bidirectional pins
-    Info (21061): Implemented 4489 logic cells
+    Info (21061): Implemented 4662 logic cells
     Info (21064): Implemented 64 RAM segments
     Info (21062): Implemented 2 DSP elements
-Info: Quartus II 64-Bit Analysis & Synthesis was successful. 0 errors, 147 warnings
-    Info: Peak virtual memory: 573 megabytes
-    Info: Processing ended: Sat Aug 25 11:50:41 2018
-    Info: Elapsed time: 00:00:29
-    Info: Total CPU time (on all processors): 00:00:27
+Info: Quartus II 64-Bit Analysis & Synthesis was successful. 0 errors, 155 warnings
+    Info: Peak virtual memory: 578 megabytes
+    Info: Processing ended: Wed Aug 29 23:19:49 2018
+    Info: Elapsed time: 00:00:26
+    Info: Total CPU time (on all processors): 00:00:26
 
 
 +------------------------------------------+

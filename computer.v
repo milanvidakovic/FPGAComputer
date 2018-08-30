@@ -177,7 +177,25 @@ cpu cpu (
 	tx_send,    // UART TX send signal
 	tx_busy,    // UART TX busy signal
 	tx_data,    // UART TX data
-	vga_mode		// VGA mode: 0-text; 1-320x240
+	vga_mode,	// VGA mode: 0-text; 1-320x240
+	ps2_data_r	// keyboard data
+);
+
+
+// ####################################
+// PS/2 keyboard instance
+// ####################################
+wire [7:0] ps2_data;
+wire ps2_received;
+reg [7:0] ps2_data_r;
+
+ps2_read ps2(
+  CLOCK_50,
+  reset,
+  gpio0[31], 		// Input pin - PS/2 data line
+  gpio0[33], 		// Input pin - PS/2 clock line
+  ps2_data,  		// here we will receive a character
+  ps2_received    // if something came from serial, this goes high
 );
 
 // ####################################
@@ -190,7 +208,7 @@ reg [7:0] rx_data_r;
 rx_serial rsr(
   CLOCK_50,
   reset,
-  gpio0[27], 				// Input pin - receive line
+  gpio0[27], 		// Input pin - receive line
   rx_data,  		// here we will receive a character
   rx_received    	// if something came from serial, this goes high
 );
@@ -206,10 +224,10 @@ wire tx_busy;
 tx_serial tsr(
   CLOCK_50,
   reset,
-  tx_data, // Character to output
-  tx_send,       // High = request a send
-  gpio0[25],   // Output pin
-  tx_busy       // High while character is being output
+  tx_data, 		// Character to output
+  tx_send,		// High = request a send
+  gpio0[25],	// Output pin
+  tx_busy		// High while character is being output
 );
 
 // ########################################
@@ -223,7 +241,17 @@ wire reset;
 assign reset = !KEY[0] || timer_reset;
 
 always @ (posedge CLOCK_50) begin
-	// ############################### IRQ1 #############################
+	// ############################### IRQ2 - keyboard #############################
+	if (ps2_received) begin
+		ps2_data_r <= ps2_data;
+		// if we have received a byte from the keyboard, we will trigger the IRQ#2
+		irq[2] <= 1'b1;
+	end
+	else 
+	begin
+		irq[2] <= 1'b0;
+	end
+	// ############################### IRQ1 - UART #############################
 	if (rx_received) begin
 		rx_data_r <= rx_data;
 		// if we have received a byte from the UART, we will trigger the IRQ#1
@@ -233,7 +261,7 @@ always @ (posedge CLOCK_50) begin
 	begin
 		irq[1] <= 1'b0;
 	end
-	// ############################### IRQ0 #############################
+	// ############################### IRQ0 - KEY 2 #############################
 	if (!KEY[1]) begin
 		// if the KEY[1] have beeen pressed, we will trigger the IRQ#0
 		irq[0] <= 1'b1;

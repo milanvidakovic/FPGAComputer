@@ -28,7 +28,7 @@ module vga_320x240#(parameter N = 16)(
 //  PARAMETER declarations
 //=======================================================
 
-localparam VIDEO_MEM_ADDR = 1200;
+localparam VIDEO_MEM_ADDR = 26880/2;
 
 //=======================================================
 //  PORT declarations

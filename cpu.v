@@ -17,7 +17,8 @@ module cpu#(parameter N = 5'd16)(
 	output tx_send,          // UART TX send signal
 	input tx_busy,           // UART TX busy signal
 	output [7:0] tx_data,    // UART TX data
-	output [1:0] vga_mode	 // VGA mode: 0-text; 1-320x240
+	output [1:0] vga_mode,	 // VGA mode: 0-text; 1-320x240
+	input [7:0] ps2_data		 // keyboard data
 );
 
 
@@ -56,7 +57,7 @@ reg [N-1:0] pc, mbr, ir;
 reg [N-1:0] mc_count, irq_count;
 reg [7:0] irq_r;
 reg [7:0] noirq;
-reg [7:0] rx_data_r;
+reg [7:0] rx_data_r, ps2_data_r;
 
 //=======================================================
 //  misc. declarations
@@ -149,6 +150,11 @@ always @ (posedge CLOCK_50) begin
 			noirq[1] <= 1; // mask IRQ1 off - no IRQ1
 			irq_r[1] <= 1;
 		end
+		if (irq[2]) begin
+			ps2_data_r <= ps2_data;
+			noirq[2] <= 1; // mask IRQ2 off - no IRQ2
+			irq_r[2] <= 1;
+		end
 		irq_count <= 1;
 	end
 	else if (irq_count && (ir == 0)) begin
@@ -199,10 +205,18 @@ always @ (posedge CLOCK_50) begin
 				if (irq_r[1]) begin
 					`ifdef DEBUG
 					LED[7] <= 1;
-					$display("3.1 JUMP TO IRQ #2 SERVICE");
+					$display("3.1 JUMP TO IRQ #1 SERVICE");
 					`endif
 					pc <= 16'd16;
 					addr <= 16'd8;
+				end
+				if (irq_r[2]) begin
+					`ifdef DEBUG
+					LED[7] <= 1;
+					$display("3.1 JUMP TO IRQ #2 SERVICE");
+					`endif
+					pc <= 16'd24;
+					addr <= 16'd12;
 				end
 				irq_count <= 0;
 				irq_r <= 0;
@@ -304,6 +318,9 @@ always @ (posedge CLOCK_50) begin
 											end
 											65: begin   // UART TX BUSY
 												regs[ir[11:8]] <= tx_busy;
+											end
+											68: begin    // keyboard data
+												regs[ir[11:8]] <= {8'b0, ps2_data_r};
 											end
 										endcase // end of case(mbr)
 										ir <= 0;      // initiate fetch
@@ -498,6 +515,9 @@ always @ (posedge CLOCK_50) begin
 										end
 										if (noirq[1] == 1) begin
 											noirq[1] <= 0;
+										end
+										if (noirq[2] == 1) begin
+											noirq[2] <= 0;
 										end
 									end
 									default: begin
