@@ -148,10 +148,7 @@ always @ (posedge CLOCK_50) begin
 		noirq <= 0;
 		millis_counter <= 0;
 		clock_counter <= 0;
-<<<<<<< HEAD
 		vga_mode <= 2'b00;
-=======
->>>>>>> branch 'master' of https://github.com/milanvidakovic/FPGAComputer.git
 	end
 	else if ((~noirq & irq) && (irq_count == 0)) begin
 		`ifdef DEBUG
