@@ -71,6 +71,9 @@ wire div_finished;
 reg start_div;
 reg [3:0] div_counter;
 
+
+reg [N-1:0] millis_counter;
+reg [15:0] clock_counter;
 //=======================================================
 //  Structural coding
 //=======================================================
@@ -101,6 +104,14 @@ ALU #(.N(N))alu(
 );
 
 always @ (posedge CLOCK_50) begin
+	if (clock_counter < 50000) begin
+		clock_counter <= clock_counter + 1'b1;
+	end
+	else begin
+		clock_counter <= 0;
+		millis_counter <= millis_counter + 1'b1;
+	end
+	
 	if (reset) begin
 		// RESET
 		`ifdef DEBUG
@@ -134,6 +145,8 @@ always @ (posedge CLOCK_50) begin
 		irq_r <= 0;
 		irq_count <= 0;
 		noirq <= 0;
+		millis_counter <= 0;
+		clock_counter <= 0;
 	end
 	else if ((~noirq & irq) && (irq_count == 0)) begin
 		`ifdef DEBUG
@@ -321,6 +334,9 @@ always @ (posedge CLOCK_50) begin
 											end
 											68: begin    // keyboard data
 												regs[ir[11:8]] <= {8'b0, ps2_data_r};
+											end
+											69: begin	// milliseconds counted so far
+												regs[ir[11:8]] <= millis_counter;
 											end
 										endcase // end of case(mbr)
 										ir <= 0;      // initiate fetch
@@ -3239,6 +3255,8 @@ initial begin
 	irq_r <= 0;
 	irq_count <= 0;
 	noirq <= 0;
+	millis_counter <= 0;
+	clock_counter <= 0;
 end
 
 endmodule

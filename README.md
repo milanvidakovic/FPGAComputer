@@ -5,19 +5,23 @@ The computer has 16-bit CPU, 64KB, UART (115200 bps), and VGA (640x480, text-bas
 
 The 16-bit CPU has 8 general-purpose registers (r0 – r7), pc (program counter), sp (stack pointer), ir (instruction register), mbr (memory buffer register), h (higher word when multiplying, or remainder when dividing).
 
-The address bus is 16 bits wide, addressing 65536 bytes. Data bus is also 16 bits wide, but all the addresses are 8-bit aligned. This gives 65536 bytes, or 64KB.
+The address bus is 16 bits wide, addressing 65536 bytes. Data bus is also 16 bits wide, but all the addresses are 8-bit aligned, meaning that two bytes are fetched with one memory access. This gives 65536 bytes, or 64KB of memory accessed two bytes at the same time.
 
-Video output is VGA, 640x480. Text mode hase 80x60 characters, each character being 8x8  pixels in dimensions. Video framebuffer in text mode has 4800 16-bit words (80x60 characters). The lower byte has the ASCII character, while the upper byte has the attributes (3 bits for the background color, 3 bits for the foreground color, inverted, and the last two bits unused). In graphics mode, the resolution is 320x240 pixels. Each pixel is 4 bits long, having two pixels per byte in the frame buffer. Each pixel's color is defined by those four bits by: xrgb.
+Video output is VGA, 640x480. Text mode hase 80x60 characters, each character being 8x8  pixels in dimensions. Video frame buffer in text mode has 4800 16-bit words (80x60 characters). The lower byte has the ASCII character, while the upper byte has the attributes (3 bits for the background color, 3 bits for the foreground color, inverted, and the last two bits unused). In graphics mode, the resolution is 320x240 pixels. Each pixel is 4 bits long, having two pixels per byte in the frame buffer. Each pixel's color is defined by those four bits by: xrgb.
 
-It has two interrupts: IRQ0 and IRQ1. IRQ0 is connected to the KEY2 of the DE0-NANO, while IDQ1 is connected to the UART. Whenever a byte comes to the UART, it generates an IRQ1. Interrupt causes CPU to push flags to the stack, then to push PC to the stack and then to jump to the location designated for the CPU:
-* for the IRQ0, it is 0x0004, and
-* for the IRQ1, it is 0x0008.
+It has three interrupts: IRQ0, IRQ1 and IRQ2. IRQ0 is connected to the KEY2 of the DE0-NANO, IDQ1 is connected to the UART, while IRQ2 is connected to the PS/2 keyboard. Whenever a byte comes to the UART, it generates an IRQ1. Whenever a key is pressed, couple of bytes are received (make and break codes), in a sequence, each causing the IRQ2 to fire.
+
+The interrupt causes the CPU to push flags to the stack, then to push PC to the stack and then to jump to the location designated for the CPU:
+* for the IRQ0, it is 0x0008,
+* for the IRQ1, it is 0x0010, and
+* for the IRQ2, it is 0x0018.
 
 It is up to the programmer to put the code in those locations. Usually, it is a JUMP instruction. To return from the interrupt routine, it is necessary to put the IRET instruction. It pops the return address, and then pops the flags register, and then goes back into the interrupted program.
+
 KEY1 of the DE0-NANO is used as the reset key. When pressed, it forces CPU to go to the 0x0000 address. Usually there is a JUMP instruction to go to the main program.
 
 # VGA text mode
-Text mode is 80x60 characters, occupying 4800 words. Lower byte is the ASCII code of a character, while the upper byte is the attributes.
+Text mode is 80x60 characters, occupying 4800 words. Lower byte is the ASCII code of a character, while the upper byte is the attributes. Video frame buffer starts at the address 26880 (decimal).
 
 The foreground color is inverted so zero values (default) would mean white color. That way, you don't need to set the foreground color to white, and by default (0, 0, 0), it is white. The default background color is black (0, 0, 0). This means that if the upper (Attribute) byte is zero (0x00), the background color is black, and the foreground color is white.
 
@@ -42,7 +46,7 @@ One byte of the video memory is organised like this:
 
 xrgbxrgb
 
-One byte holds two pixels. The x bit is unused, and the other bits define red, green and blue component of the color for each of those two pixels. Video frame buffer starts at the address 2400 (decimal). So, if you want to put four white pixels at the top left corner of the screen (from the (0,0) to the (3,0) coordinates), you need to type:
+One byte holds two pixels. The x bit is unused, and the other bits define red, green and blue component of the color for each of those two pixels. Video frame buffer starts at the address 26880 (decimal). So, if you want to put four white pixels at the top left corner of the screen (from the (0,0) to the (3,0) coordinates), you need to type:
 
 mov r0, 0x7777
 st [2400], r0
@@ -77,3 +81,11 @@ Addresses used by the UART are in the following list:
 * 64 -> Received byte from the RX part of the UART (use the IN instruction).
 * 65 -> 0 if the TX part of the UART is free to send a byte, 1 if TX part is busy.
 * 66 -> Byte to be sent must be placed here using the OUT instruction.
+
+# PS/2 interface
+
+PS/2 interface works with PS/2 keyboards. Just connect the keyboard to the PS/2 connector, and the IRQ2 will be fired for each byte of the make/break sequence. 
+
+PS/2 connector is connected to the GPIO ports of the DE0-NANO board:
+* Data is connected to the GPIO31 (PIN_D11) port
+* Clock is connected to the GPIO33 (PIN_B12) port.
