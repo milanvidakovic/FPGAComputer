@@ -3,22 +3,61 @@ TimeQuest Timing Analyzer Summary
 ------------------------------------------------------------
 
 Type  : Slow 1200mV 85C Model Setup 'CLOCK_50'
+<<<<<<< HEAD
+Slack : 0.565
+=======
 Slack : 0.592
+>>>>>>> branch 'master' of https://github.com/milanvidakovic/FPGAComputer.git
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Hold 'CLOCK_50'
+<<<<<<< HEAD
+Slack : 0.342
+=======
 Slack : 0.341
+>>>>>>> branch 'master' of https://github.com/milanvidakovic/FPGAComputer.git
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Recovery 'CLOCK_50'
+<<<<<<< HEAD
+Slack : 15.701
+=======
 Slack : 16.399
+>>>>>>> branch 'master' of https://github.com/milanvidakovic/FPGAComputer.git
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Removal 'CLOCK_50'
+<<<<<<< HEAD
+Slack : 3.416
+=======
 Slack : 2.673
+>>>>>>> branch 'master' of https://github.com/milanvidakovic/FPGAComputer.git
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Minimum Pulse Width 'CLOCK_50'
+<<<<<<< HEAD
+Slack : 9.510
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Setup 'CLOCK_50'
+Slack : 1.526
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Hold 'CLOCK_50'
+Slack : 0.297
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Recovery 'CLOCK_50'
+Slack : 16.107
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Removal 'CLOCK_50'
+Slack : 3.065
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'CLOCK_50'
+=======
+>>>>>>> branch 'master' of https://github.com/milanvidakovic/FPGAComputer.git
 Slack : 9.511
 TNS   : 0.000
 
@@ -43,23 +82,43 @@ Slack : 9.510
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Setup 'CLOCK_50'
+<<<<<<< HEAD
+Slack : 4.309
+=======
 Slack : 4.327
+>>>>>>> branch 'master' of https://github.com/milanvidakovic/FPGAComputer.git
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Hold 'CLOCK_50'
+<<<<<<< HEAD
+Slack : 0.178
+=======
 Slack : 0.176
+>>>>>>> branch 'master' of https://github.com/milanvidakovic/FPGAComputer.git
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Recovery 'CLOCK_50'
+<<<<<<< HEAD
+Slack : 17.496
+=======
 Slack : 17.890
+>>>>>>> branch 'master' of https://github.com/milanvidakovic/FPGAComputer.git
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Removal 'CLOCK_50'
+<<<<<<< HEAD
+Slack : 1.972
+=======
 Slack : 1.534
+>>>>>>> branch 'master' of https://github.com/milanvidakovic/FPGAComputer.git
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Minimum Pulse Width 'CLOCK_50'
+<<<<<<< HEAD
+Slack : 9.215
+=======
 Slack : 9.204
+>>>>>>> branch 'master' of https://github.com/milanvidakovic/FPGAComputer.git
 TNS   : 0.000
 
 ------------------------------------------------------------

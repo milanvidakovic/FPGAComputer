@@ -1,7 +1,12 @@
 Warning (10273): Verilog HDL warning at ps2_read.v(10): extended using "x" or "z"
+Warning (10268): Verilog HDL information at vga_320x240.v(139): always construct contains both blocking and non-blocking assignments
 Warning (10273): Verilog HDL warning at rx_serial.v(25): extended using "x" or "z"
+<<<<<<< HEAD
+Warning (10268): Verilog HDL information at cpu.v(107): always construct contains both blocking and non-blocking assignments
+=======
 Warning (10268): Verilog HDL information at cpu.v(106): always construct contains both blocking and non-blocking assignments
+>>>>>>> branch 'master' of https://github.com/milanvidakovic/FPGAComputer.git
 Warning (10268): Verilog HDL information at chars.v(18): always construct contains both blocking and non-blocking assignments
 Warning (10268): Verilog HDL information at div.v(19): always construct contains both blocking and non-blocking assignments
 Info (10281): Verilog HDL Declaration information at div.v(2): object "N" differs only in case from object "n" in the same scope
-Warning (10268): Verilog HDL information at alu.v(55): always construct contains both blocking and non-blocking assignments
+Warning (10268): Verilog HDL information at alu.v(56): always construct contains both blocking and non-blocking assignments

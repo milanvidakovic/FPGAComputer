@@ -35,14 +35,15 @@ localparam ALU_DIV = 4'd4;
 localparam ALU_AND = 4'd5;
 localparam ALU_OR  = 4'd6;
 localparam ALU_XOR = 4'd7;
-localparam ALU_NEG = 4'd8;
+localparam ALU_INV = 4'd8;
 localparam ALU_SHL = 4'd9;
 localparam ALU_SHR = 4'd10;
+localparam ALU_NEG = 4'd11;
 
 reg [N*2-1:0] tmp;
 wire [N-1:0] dres, dhigh, dcount;
 wire dfinished, dstart;
-
+reg [3:0] div_count;
 
 div #(.N(N))div1 (
 	CLK,
@@ -65,20 +66,6 @@ always @(negedge CLK) begin
 			finished <= 1'b1;
 		end
 		ALU_DIV: begin 
-			/*
-			if (start) begin
-				tmp[N-1:0] = a / b;
-				high = a % b;
-				finished <= 1'b0;
-			end
-			else if (!start && !finished) begin
-				finished <= 1'b1;
-			end
-			else begin
-				finished <= 1'b0;
-			end
-			*/
-			
 			if (!start && dfinished) begin
 				tmp[N-1:0] = dres;
 				high = dhigh;
@@ -87,14 +74,14 @@ always @(negedge CLK) begin
 			else begin
 			   finished <= 1'b0; 
 			end
-			
 		end
 		ALU_AND: tmp = {{N{1'b0}}, a & b};
 		ALU_OR : tmp = {{N{1'b0}}, a | b};
 		ALU_XOR: tmp = {{N{1'b0}}, a ^ b};
-		ALU_NEG: tmp = {{N{1'b0}}, ~a};
+		ALU_INV: tmp = {{N{1'b0}}, ~a};
 		ALU_SHL: tmp = a << b;
 		ALU_SHR: tmp = a >> b;
+		ALU_NEG: tmp = {{N{1'b0}}, -b};
 	endcase
 	
 	// ZERO

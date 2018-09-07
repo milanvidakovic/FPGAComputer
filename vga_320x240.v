@@ -29,6 +29,16 @@ module vga_320x240#(parameter N = 16)(
 //=======================================================
 
 localparam VIDEO_MEM_ADDR = 26880/2;
+localparam IN_LINE                       = 0;
+localparam H_BLANK                       = 1;
+localparam V_BLANK                       = 2;
+localparam READ_SPRITES                  = 3;
+localparam READ_SPRITE_X                 = 4;
+localparam READ_SPRITE_Y                 = 5;
+localparam READ_SPRITE_TRANSPARENT_COLOR = 6;
+localparam READ_SPRITE_DATA              = 7;
+localparam SCAN_IDLE                     = 8;
+localparam SPRITE_NUM                    = 3;
 
 //=======================================================
 //  PORT declarations
@@ -51,10 +61,8 @@ reg [15:0] curr_char;
 reg [9:0] xx;
 reg [9:0] yy;
 
-wire [15:0] pixels; // Pixels making up one row of the character 
+wire [15:0] pixels; // Pixels making up one row of the word containing four pixels
 
-//assign hs = x < (640 + 16) || x >= (640 + 16 + 96);
-//assign vs = y < (480 + 10) || y >= (480 + 10 + 2);
 assign valid = (x < 640) && (y < 480);
 assign xx = x >> 1;
 assign yy = y >> 1;
@@ -75,6 +83,58 @@ assign rb = enable ? b : 1'bZ;
 
 reg [3:0]count_read;
 reg mem_read;
+reg[2:0] state;
+
+integer i = 0;
+reg sprite_found;
+reg [4:0] sprite_counter;
+
+// Declare the sprite local memory
+reg [63:0] sprite_pixels[0:SPRITE_NUM-1][0:15]; // 64x16 bits == 16x16 pixels for each sprite (SPRITE_NUM sprites supported)
+/*
+= '{
+  '{64'h0000000440000000,  // 0
+	 64'h0000004ff4000000,  // 1
+	 64'h0000004ff4000000,  // 2
+	 64'h0000004ff4000000,  // 3
+	 64'h0000004ff4000000,  // 4
+	 64'h0000004ff4000000,  // 5
+	 64'h0000044ff4400000,  // 6
+	 64'h0000444ff4440000,  // 7
+	 64'h0004444ff4444000,  // 8
+	 64'h0044444ff4444400,  // 9
+	 64'h0400004ff4000040,  // 10
+	 64'h0000004ff4000000,  // 11
+	 64'h0000004ff4000000,  // 12
+	 64'h0000041ff1400000,  // 13
+	 64'h0000411111140000,  // 14
+	 64'h0004444444444000   // 15
+ },
+  '{64'h0000000000000000,  // 0
+	 64'h0000000ff0000000,  // 1
+	 64'h0000000ff0000000,  // 2
+	 64'h0000000ff0000000,  // 3
+	 64'h0000008ff8000000,  // 4
+	 64'h0000008ff8000000,  // 5
+	 64'h0000088ff8800000,  // 6
+	 64'h0000888ff8880000,  // 7
+	 64'h0008888ff8888000,  // 8
+	 64'h0080008ff8000800,  // 9
+	 64'h0000008ff8000000,  // 10
+	 64'h0000000ff0000000,  // 11
+	 64'h0000000ff0000000,  // 12
+	 64'h0000001ff1000000,  // 13
+	 64'h0000011111100000,  // 14
+	 64'h0000000000000000   // 15
+ }
+};
+*/
+reg [15:0] sprite_addr [0:SPRITE_NUM-1];// = '{16'b0, 16'b0, 16'b0, 16'b0, 16'b0, 16'b0, 16'b0, 16'b0, 16'b0, 16'b0, 16'b0, 16'b0, 16'b0, 16'b0, 16'b0, 16'b0};  // addresses of all sprites
+reg [15:0] sprite_x [0:SPRITE_NUM-1];// = '{16'd25, 16'b0, 16'b0, 16'b0, 16'b0, 16'b0, 16'b0, 16'b0};  // x coordinate of all sprites
+reg [15:0] sprite_y [0:SPRITE_NUM-1];// = '{16'd25, 16'b0, 16'b0, 16'b0, 16'b0, 16'b0, 16'b0, 16'b0};  // y coordinate of all sprites
+reg [3:0] sprite_transparent_color[0:SPRITE_NUM-1];// = '{16'b0, 16'b0, 16'b0, 16'b0, 16'b0, 16'b0, 16'b0, 16'b0}; // transparent color for a sprite
+reg [15:0] line_counter;  // counter of lines of bytes to be fetched from the main memory into the sprite_pixels
+reg [3:0] word_counter;  // counter of words within one row of sprite_pixels
 
 always @(posedge CLOCK_50) begin
 //	newframe <= 0;
@@ -83,6 +143,10 @@ always @(posedge CLOCK_50) begin
 		x <= 10'b0;
 		y <= 10'b0;
 		clk25 <= 1'b0;
+		state <= IN_LINE;
+		for (i = 0; i < SPRITE_NUM; i = i + 1) 
+			sprite_addr[i] <= 16'd0;
+		sprite_found = 1'b0;
 //		newframe <= 1;
 //		newline <= 1;
 	end 
@@ -94,53 +158,144 @@ always @(posedge CLOCK_50) begin
 			end 
 			else begin
 				x <= 10'b0;
+				state <= IN_LINE;
 //				newline <= 1;
 				if (y < 10'd524) begin
 					y <= y + 1'b1;
 				end 
 				else begin
 					y <= 10'b0;
+					sprite_found = 1'b0;
 //					newframe <= 1;
 				end
 			end
-			if (mem_read) begin
+			case (state) 
+			IN_LINE, H_BLANK: begin
 				pixels <= data;
 				rd <= 1'bz;
 				wr <= 1'bz;
 				mem_read <= 1'b0;
 			end
-		end 
-		else begin
-			// this is the other cycle when we divide 50MHz
-			if (x >= 640) begin
-				if (!mem_read) begin
-					if ((x >= 640) && (y >= 480)) begin
-						// when we start the vertical blanking, we need to fetch in advance the first word at (0, 0)
+			READ_SPRITES: begin
+				sprite_addr[sprite_counter] <= data;
+				state <= READ_SPRITE_X;
+				rd <= 1'b1;
+				wr <= 1'b0;
+				mem_read <= 1'b1;
+				addr <= (16'd58 + (sprite_counter << 3)) >> 1;    // read x coordinate of the first sprite
+			end
+			READ_SPRITE_X: begin
+				sprite_x[sprite_counter] <= data;
+				state <= READ_SPRITE_Y;
+				rd <= 1'b1;
+				wr <= 1'b0;
+				mem_read <= 1'b1;
+				addr <= (16'd60 + (sprite_counter << 3)) >> 1;    // read y coordinate of the first sprite
+			end
+			READ_SPRITE_Y: begin
+				sprite_y[sprite_counter] <= data;
+				state <= READ_SPRITE_TRANSPARENT_COLOR;
+				rd <= 1'b1;
+				wr <= 1'b0;
+				mem_read <= 1'b1;
+				addr <= (16'd62 + (sprite_counter << 3)) >> 1;    // read transparent color of the first sprite
+			end
+			READ_SPRITE_TRANSPARENT_COLOR: begin
+				sprite_transparent_color[sprite_counter] <= data[3:0];
+				state <= READ_SPRITE_DATA;
+				rd <= 1'b1;
+				wr <= 1'b0;
+				mem_read <= 1'b1;
+				line_counter <= 16'b0;
+				word_counter <= 4'b0;
+				addr <= sprite_addr[sprite_counter] >> 1;    // read sprite definition bytes
+			end
+			READ_SPRITE_DATA: begin
+				if (line_counter < 16) begin
+					case (word_counter) 
+					0:	sprite_pixels[sprite_counter][line_counter][63:48] <= data;
+					1:	sprite_pixels[sprite_counter][line_counter][47:32] <= data;
+					2:	sprite_pixels[sprite_counter][line_counter][31:16] <= data;
+					3:	sprite_pixels[sprite_counter][line_counter][15:0]  <= data;
+					endcase
+					state <= READ_SPRITE_DATA;
+					rd <= 1'b1;
+					wr <= 1'b0;
+					mem_read <= 1'b1;
+					if (word_counter < 3) begin
+						word_counter = word_counter + 1'b1;
+					end
+					else begin
+						word_counter = 1'b0;
+						line_counter = line_counter + 16'b1;
+					end
+					addr = (sprite_addr[sprite_counter] + ((word_counter + (line_counter << 2)) << 1) ) >> 1;    // read sprite definition bytes
+					
+				end
+				else 
+				begin
+					if (sprite_counter < SPRITE_NUM) begin
+						sprite_counter = sprite_counter + 1'b1;
+						state <= READ_SPRITES;
+						rd <= 1'b1;
+						wr <= 1'b0;
+						mem_read <= 1'b1;
+						addr <= (16'd56 + (sprite_counter << 3)) >> 1;    // read next sprite definition address
+					end
+					else begin
+						sprite_counter <= 4'b0;
 						rd <= 1'b1;
 						wr <= 1'b0;
 						mem_read <= 1'b1;
 						addr <= VIDEO_MEM_ADDR + 0;
-					end
-					else if ((x >= 640) && (y < 480)) begin
-						// when we start the horizontal blanking, and we need to go to the next line, 
-						// we need to fetch in advance the first word in next line (0, y+1)
-						rd <= 1'b1;
-						wr <= 1'b0;
-						mem_read <= 1'b1;
-						if ((y & 1) == 1) begin
-							addr <= VIDEO_MEM_ADDR + ((yy + 1) * 80);
-						end
-						else begin
-							addr <= VIDEO_MEM_ADDR + ((yy) * 80);
-						end
+						state <= V_BLANK;
 					end
 				end
-			end // if (!valid)
+			end
+			V_BLANK: begin
+				// If we have just read the pixel at the (0,0), then we have 44 lines available to read sprite data (more than 300 16-bit words of sprite data)
+				pixels <= data;
+				state <= SCAN_IDLE;
+				rd <= 1'bz;
+				wr <= 1'bz;
+				mem_read <= 1'b0;
+
+				//sprite_pixels[0][0] <= data; //64'h1111111111111111;
+				
+			end
+			endcase
+		end 
+		else begin
+			// this is the other cycle when we divide 50MHz
+			if ((x >= 640) && (y == 479) && (state == IN_LINE)) begin
+					// when we start the vertical blanking, we need to fetch in advance the first word at (0, 0)
+					state <= READ_SPRITES;
+					sprite_counter <= 4'b0;
+					rd <= 1'b1;
+					wr <= 1'b0;
+					mem_read <= 1'b1;
+					addr <= 16'd28;    // read first sprite definition address
+				end
+			else if ((x == 640) && (y < 479) && (state == IN_LINE)) begin
+					// when we start the horizontal blanking, and we need to go to the next line, 
+					// we need to fetch in advance the first word in next line (0, y+1)
+					state <= H_BLANK;
+					rd <= 1'b1;
+					wr <= 1'b0;
+					mem_read <= 1'b1;
+					if ((y & 1) == 1) begin
+						addr <= VIDEO_MEM_ADDR + ((yy + 1) * 80);
+					end
+					else begin
+						addr <= VIDEO_MEM_ADDR + ((yy) * 80);
+					end
+					//sprite_pixels[0][0] <= 64'h1111111111111111;
+			end
 			// from this moment on, x and y are valid
-			else if (x < 640 && !mem_read) begin
+			else if ((x < 640) && (y < 480)) begin 
+				state <= IN_LINE;
 				if ((x & 7) == 7)  begin
-					// when we are finishing current word, containing four pixels, we need to fetch in advance the next word (x+1, y)
-					// at the last pixel of the current character, let's fetch next
+					// when we are finishing current word, containing four pixels, we need to fetch in advance next four pixels at (x+1, y)
 					rd <= 1'b1;
 					wr <= 1'b0;
 					addr <= VIDEO_MEM_ADDR + ((xx >> 2) + (yy * 80) + 1);
@@ -152,9 +307,33 @@ always @(posedge CLOCK_50) begin
 	end
 	
 	if (valid) begin
-		r <= pixels[12 - ((xx & 3) << 2) + 0] == 1'b1;
-		g <= pixels[12 - ((xx & 3) << 2) + 1] == 1'b1;
-		b <= pixels[12 - ((xx & 3) << 2) + 2] == 1'b1;
+		for (i = 0; i < SPRITE_NUM; i = i+1) begin
+			if ((sprite_addr[i] != 16'b0) && (xx >= sprite_x[i]) && (xx < (sprite_x[i] + 16)) && (yy >= sprite_y[i]) && (yy < (sprite_y[i] + 16))) begin
+				sprite_found = 1'b1;
+				if (
+					sprite_pixels[i][yy - sprite_y[i]][60-(((xx - sprite_x[i]) << 2) ) + 0] != sprite_transparent_color[i][0] ||
+					sprite_pixels[i][yy - sprite_y[i]][60-(((xx - sprite_x[i]) << 2) ) + 1] != sprite_transparent_color[i][1] ||
+					sprite_pixels[i][yy - sprite_y[i]][60-(((xx - sprite_x[i]) << 2) ) + 2] != sprite_transparent_color[i][2]
+				) begin
+					r <= sprite_pixels[i][yy - sprite_y[i]][60-(((xx - sprite_x[i]) << 2) ) + 0] == 1'b1;
+					g <= sprite_pixels[i][yy - sprite_y[i]][60-(((xx - sprite_x[i]) << 2) ) + 1] == 1'b1;
+					b <= sprite_pixels[i][yy - sprite_y[i]][60-(((xx - sprite_x[i]) << 2) ) + 2] == 1'b1;
+				end 
+				else begin
+					r <= pixels[12 - ((xx & 3) << 2) + 0] == 1'b1;
+					g <= pixels[12 - ((xx & 3) << 2) + 1] == 1'b1;
+					b <= pixels[12 - ((xx & 3) << 2) + 2] == 1'b1;
+				end
+			end 
+		end
+		if (!sprite_found) begin
+			r <= pixels[12 - ((xx & 3) << 2) + 0] == 1'b1;
+			g <= pixels[12 - ((xx & 3) << 2) + 1] == 1'b1;
+			b <= pixels[12 - ((xx & 3) << 2) + 2] == 1'b1;
+		end
+		else begin
+			sprite_found = 1'b0;
+		end
 	end
 	else begin
 		// blanking -> no pixels
@@ -168,6 +347,10 @@ initial begin
 		x <= 10'b0;
 		y <= 10'b0;
 		clk25 <= 1'b0;
+		state <= IN_LINE;
+		for (i = 0; i < SPRITE_NUM; i = i + 1) 
+			sprite_addr[i] <= 16'd0;
+		sprite_found = 1'b0;
 //		newframe <= 1;
 //		newline <= 1;
 end

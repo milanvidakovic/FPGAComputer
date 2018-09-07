@@ -90,7 +90,7 @@ wire v0, v1;
 assign v0 = (vga_mode == 2'b00);
 assign v1 = (vga_mode == 2'b01);
 
-vga_module vga0 (
+vga_module #(.N(N))vga0(
 	v0,
 	
 	//////////// CLOCK //////////
@@ -112,7 +112,7 @@ vga_module vga0 (
 	wr2
 );
 
-vga_320x240 vga1 (
+vga_320x240 #(.N(N))vga1 (
 	v1,
 	
 	//////////// CLOCK //////////
@@ -147,7 +147,7 @@ assign gpio0[7] = vgaoe ? vs : 1'bZ ;
 // ####################################################################################################################
 // RAM instance (dual port RAM; one port is connected to the CPU, while the other is connected to the video subsystem)
 // ####################################################################################################################
-RAM ram (
+RAM #(.N(N))ram(
 	CLOCK_50,
 	data,
 	addr,
@@ -162,7 +162,7 @@ RAM ram (
 // ####################################
 // CPU instance
 // ####################################
-cpu cpu (
+cpu #(.N(N))cpu(
 	CLOCK_50,
 	reset, // reset key
 	

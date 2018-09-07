@@ -31,6 +31,9 @@ module vga_module#(parameter N = 16)(
 //=======================================================
 
 localparam VIDEO_MEM_ADDR = 26880/2;
+localparam IN_LINE = 0;
+localparam H_BLANK = 1;
+localparam V_BLANK = 2;
 
 //=======================================================
 //  PORT declarations
@@ -54,6 +57,7 @@ reg [9:0] x;
 reg [9:0] y;
 wire valid;
 reg [15:0] curr_char;
+reg[1:0] state;
 
 
 wire [7:0] pixels; // Pixels making up one row of the character 
@@ -92,6 +96,7 @@ always @(posedge CLOCK_50) begin
 		x <= 10'b0;
 		y <= 10'b0;
 		clk25 <= 1'b0;
+		state <= IN_LINE;
 //		newframe <= 1;
 //		newline <= 1;
 	end 
@@ -103,6 +108,7 @@ always @(posedge CLOCK_50) begin
 			end 
 			else begin
 				x <= 10'b0;
+				state <= IN_LINE;
 //				newline <= 1;
 				if (y < 10'd524) begin
 					y <= y + 1'b1;
@@ -122,34 +128,35 @@ always @(posedge CLOCK_50) begin
 		else begin
 			// this is the other cycle when we divide 50MHz
 			if (x >= 640) begin
-				if (!mem_read) begin
-					if ((x >= 640) && (y >= 480)) begin
-						// when we start the vertical blanking, we need to fetch in advance the first character (0, 0)
-						rd <= 1'b1;
-						wr <= 1'b0;
-						addr <= VIDEO_MEM_ADDR + 0;
-						mem_read <= 1'b1;
-					end
-					else if ((x >= 640) && ((y & 7) < 7)) begin
-						// when we start the horizontal blanking, and still displaying character in the current line,
-						// we need to fetch in advance the first character in the current line (0, y)
-						rd <= 1'b1;
-						wr <= 1'b0;
-						addr <= VIDEO_MEM_ADDR + ((y >> 3)*80);
-						mem_read <= 1'b1;
-					end
-					else if ((x >= 640) && ((y & 7) == 7)) begin
-						// when we start the horizontal blanking, and we need to go to the next line, 
-						// we need to fetch in advance the first character in next line (0, y+1)
-						rd <= 1'b1;
-						wr <= 1'b0;
-						addr <= VIDEO_MEM_ADDR + (((y >> 3) + 1)*80);
-						mem_read <= 1'b1;
-					end
+				if ((x >= 640) && (y >= 480) && ((state == H_BLANK))) begin
+					// when we start the vertical blanking, we need to fetch in advance the first character (0, 0)
+					state <= V_BLANK;
+					rd <= 1'b1;
+					wr <= 1'b0;
+					addr <= VIDEO_MEM_ADDR + 0;
+					mem_read <= 1'b1;
+				end
+				else if ((x >= 640) && ((y & 7) < 7) && (state == IN_LINE)) begin
+					// when we start the horizontal blanking, and still displaying character in the current line,
+					// we need to fetch in advance the first character in the current line (0, y)
+					state <= H_BLANK;
+					rd <= 1'b1;
+					wr <= 1'b0;
+					addr <= VIDEO_MEM_ADDR + ((y >> 3)*80);
+					mem_read <= 1'b1;
+				end
+				else if ((x >= 640) && ((y & 7) == 7) && (state == IN_LINE)) begin
+					// when we start the horizontal blanking, and we need to go to the next line, 
+					// we need to fetch in advance the first character in next line (0, y+1)
+					state <= H_BLANK;
+					rd <= 1'b1;
+					wr <= 1'b0;
+					addr <= VIDEO_MEM_ADDR + (((y >> 3) + 1)*80);
+					mem_read <= 1'b1;
 				end
 			end // if (!valid)
 			// from this moment on, x and y are valid
-			else if (x < 640 && !mem_read) begin
+			else if ((x < 640) && (!mem_read)) begin
 				if ((x & 7) == 7) begin
 					// when we are finishing current character, we need to fetch in advance the next character (x+1, y)
 					// at the last pixel of the current character, let's fetch next
@@ -180,6 +187,7 @@ initial begin
 		x <= 10'b0;
 		y <= 10'b0;
 		clk25 <= 1'b0;
+		state <= IN_LINE;
 //		newframe <= 1;
 //		newline <= 1;
 end

@@ -2,23 +2,23 @@
 module cpu#(parameter N = 5'd16)(
 
 //////////// CLOCK //////////
-	input	CLOCK_50,
+	input	 CLOCK_50,
 	
-	input reset,  // reset signal
+	input  reset,  // reset signal
 
-	input [N-1:0] data,
+	input  [N-1:0] data,
 	output [N-1:0] data_to_write,
 	output [N-1:0] addr,
 	output memrd, 
 	output memwr, 
-	input [7:0] irq,
+	input  [7:0] irq,
 	output [7:0] LED,
-	input [7:0] rx_data,     // UART RECEIVED BYTE 
+	input  [7:0] rx_data,     // UART RECEIVED BYTE 
 	output tx_send,          // UART TX send signal
-	input tx_busy,           // UART TX busy signal
+	input  tx_busy,           // UART TX busy signal
 	output [7:0] tx_data,    // UART TX data
 	output [1:0] vga_mode,	 // VGA mode: 0-text; 1-320x240
-	input [7:0] ps2_data		 // keyboard data
+	input  [7:0] ps2_data		 // keyboard data
 );
 
 
@@ -43,9 +43,10 @@ localparam ALU_DIV = 4'd4;
 localparam ALU_AND = 4'd5;
 localparam ALU_OR  = 4'd6;
 localparam ALU_XOR = 4'd7;
-localparam ALU_NEG = 4'd8;
+localparam ALU_INV = 4'd8;
 localparam ALU_SHL = 4'd9;
 localparam ALU_SHR = 4'd10;
+localparam ALU_NEG = 4'd11;
 
 
 //=======================================================
@@ -53,7 +54,7 @@ localparam ALU_SHR = 4'd10;
 //=======================================================
 
 reg [N-1:0] regs[9:0];  // 0-7 are r0-r7; 8 is sp, 9 is high
-reg [N-1:0] pc, mbr, ir;
+reg [N-1:0] pc, mbr, mbr_e, ir;
 reg [N-1:0] mc_count, irq_count;
 reg [7:0] irq_r;
 reg [7:0] noirq;
@@ -147,6 +148,10 @@ always @ (posedge CLOCK_50) begin
 		noirq <= 0;
 		millis_counter <= 0;
 		clock_counter <= 0;
+<<<<<<< HEAD
+		vga_mode <= 2'b00;
+=======
+>>>>>>> branch 'master' of https://github.com/milanvidakovic/FPGAComputer.git
 	end
 	else if ((~noirq & irq) && (irq_count == 0)) begin
 		`ifdef DEBUG
@@ -283,7 +288,7 @@ always @ (posedge CLOCK_50) begin
 				end
 			default: begin
 				case ({ir[3:0]}) 
-					// GROUP - 0 (NOP, MOV, IN, OUT, PUSH, POP, RET, IRET, SWAP)
+					// GROUP - 0 (NOP, MOV, IN, OUT, PUSH, POP, RET, IRET, SWAP, HALT)
 					4'b0000: begin
 						case (ir[7:4]) 
 							4'b0000: begin
@@ -444,7 +449,7 @@ always @ (posedge CLOCK_50) begin
 									default: begin
 									end
 								endcase // mc_count
-							end // end of DIV regx, regy
+							end // end of PUSH xx
 							// POP reg
 							4'b0111: begin
 								`ifdef DEBUG
@@ -548,11 +553,12 @@ always @ (posedge CLOCK_50) begin
 								`endif
 								regs[ir[11:8]] <= regs[ir[15:12]];
 								regs[ir[15:12]] <= regs[ir[11:8]];
-								ir <= 0;     // initiate fetch
 								addr <= pc >> 1;
+								ir <= 0;     // initiate fetch
 								// pc already points to the next instruction
 							end // END OF SWAP
 							4'b1111: begin
+								// HALT
 								`ifdef DEBUG
 								$display("HALT");
 								LED[5] <= 1;
@@ -1542,7 +1548,7 @@ always @ (posedge CLOCK_50) begin
 						endcase // ir [7:4] 
 					end // end of GROUP - 3 (LOAD, STORE)
 					
-					// GROUP - 4, 5, 6, 7, 8 (ADD, SUB, AND, OR, XOR, SHL, SHR, MUL, DIV)
+					// GROUP - 4, 5, 6, 7, 8 (ADD, SUB, AND, OR, XOR, NEG, SHL, SHR, MUL, DIV)
 					4'b0100, 4'b0101, 4'b0110, 4'b0111, 4'b1000: begin
 						case (ir[7:4]) 
 							// ADD/AND/XOR/SHL/MUL regx, regy
@@ -1896,12 +1902,13 @@ always @ (posedge CLOCK_50) begin
 									end
 								endcase
 							end // end of ADD/AND/XOR/SHL/MUL.B regx, [regy + xx]
-							// SUB/OR/SHR/DIV regx, regy
+							// SUB/OR/NEG/SHR/DIV regx, regy
 							4'b1000: begin
 								`ifdef DEBUG
 								case (ir[3:0])
 									4: $display("%2x: SUB r%-d, r%-d", ir[3:0], (ir[11:8]), (ir[15:12]));
 									5: $display("%2x: OR r%-d, r%-d", ir[3:0], (ir[11:8]), (ir[15:12]));
+									6: $display("%2x: NEG r%-d", ir[3:0], (ir[15:12]));
 									7: $display("%2x: SHR r%-d, r%-d", ir[3:0], (ir[11:8]), (ir[15:12]));
 									8: $display("%2x: DIV r%-d, r%-d", ir[3:0], (ir[11:8]), (ir[15:12]));
 									default: $display("WRONG OPCODE: %02d, %02x", ir[3:0], ir[3:0]);
@@ -1912,6 +1919,7 @@ always @ (posedge CLOCK_50) begin
 										case (ir[3:0])
 											4: alu_op <= ALU_SUB;
 											5: alu_op <= ALU_OR;
+											6: alu_op <= ALU_NEG;
 											7: alu_op <= ALU_SHR;
 											8: alu_op <= ALU_DIV;
 											default: alu_op <= 0;
@@ -1946,7 +1954,7 @@ always @ (posedge CLOCK_50) begin
 									default: begin
 									end
 								endcase
-							end // end of SUB/OR/SHR/DIV regx, regx
+							end // end of SUB/OR/NEG/SHR/DIV regx, regx
 							// SUB/OR/SHR/DIV reg, xx
 							4'b1001: begin
 								`ifdef DEBUG
@@ -1998,13 +2006,14 @@ always @ (posedge CLOCK_50) begin
 									default: begin
 									end
 								endcase
-							end // end of SUB/OR/SHR/DIV reg, xx
-							// SUB/OR/SHR/DIV regx, [regy]
+							end // end of SUB/OR/NEG/SHR/DIV reg, xx
+							// SUB/OR/NEG/SHR/DIV regx, [regy]
 							4'b1010: begin
 								`ifdef DEBUG
 								case (ir[3:0])
 									4: $display("%2x: SUB r%-d, [r%-d]", ir[3:0], (ir[11:8]), (ir[15:12]));
 									5: $display("%2x: OR r%-d, [r%-d]", ir[3:0], (ir[11:8]), (ir[15:12]));
+									6: $display("%2x: NEG [r%-d]", ir[3:0], (ir[15:12]));
 									7: $display("%2x: SHR r%-d, [r%-d]", ir[3:0], (ir[11:8]), (ir[15:12]));
 									8: $display("%2x: DIV r%-d, [r%-d]", ir[3:0], (ir[11:8]), (ir[15:12]));
 									default: $display("WRONG OPCODE: %02d, %02x", ir[3:0], ir[3:0]);
@@ -2020,6 +2029,7 @@ always @ (posedge CLOCK_50) begin
 										case (ir[3:0])
 											4: alu_op <= ALU_SUB;
 											5: alu_op <= ALU_OR;
+											6: alu_op <= ALU_NEG;
 											7: alu_op <= ALU_SHR;
 											8: alu_op <= ALU_DIV;
 											default: alu_op <= 0;
@@ -2044,6 +2054,15 @@ always @ (posedge CLOCK_50) begin
 												addr <= pc >> 1;
 											end
 										end
+										else if (ir[3:0] == 6) begin
+											// NEG
+											f <= f_from_alu;
+											data_to_write <= alu_res;
+											addr <= regs[ir[15:12]] >> 1;
+											memwr <= 1'b1;
+											memrd <= 1'b0;
+											mc_count <= 3;
+										end
 										else begin
 											regs[ir[11:8]] <= alu_res;
 											f <= f_from_alu;
@@ -2051,16 +2070,23 @@ always @ (posedge CLOCK_50) begin
 											addr <= pc >> 1;
 										end
 									end
+									3: begin
+										memwr <= 1'b0;
+										memrd <= 1'b1;
+										ir <= 0;     // initiate fetch
+										addr <= pc >> 1;
+									end
 									default: begin
 									end
 								endcase
-							end // end of SUB/OR/SHR/DIV regx, [regy]
-							// SUB/OR/SHR/DIV reg, [xx]
+							end // end of SUB/OR/NEG/SHR/DIV regx, [regy]
+							// SUB/OR/NEG/SHR/DIV reg, [xx]
 							4'b1011: begin
 								`ifdef DEBUG
 								case (ir[3:0])
 									4: $display("%2x: SUB r%-d, [%-d]", ir[3:0], (ir[11:8]), data);
 									5: $display("%2x: OR r%-d, [%-d]", ir[3:0], (ir[11:8]), data);
+									6: $display("%2x: NEG [%-d]", ir[3:0], data);
 									7: $display("%2x: SHR r%-d, [%-d]", ir[3:0], (ir[11:8]), data);
 									8: $display("%2x: DIV r%-d, [%-d]", ir[3:0], (ir[11:8]), data);
 									default: $display("WRONG OPCODE: %02d, %02x", ir[3:0], ir[3:0]);
@@ -2070,6 +2096,7 @@ always @ (posedge CLOCK_50) begin
 									0: begin
 										// step 1: we try to read memory from the xx address
 										addr <= data >> 1;
+										mbr <= data;
 										mc_count <= 1;
 										pc <= pc + 2'd2;  // move to the next instruction
 									end
@@ -2077,6 +2104,7 @@ always @ (posedge CLOCK_50) begin
 										case (ir[3:0])
 											4: alu_op <= ALU_SUB;
 											5: alu_op <= ALU_OR;
+											6: alu_op <= ALU_NEG;
 											7: alu_op <= ALU_SHR;
 											8: alu_op <= ALU_DIV;
 											default: alu_op <= 0;
@@ -2101,6 +2129,15 @@ always @ (posedge CLOCK_50) begin
 												addr <= pc >> 1;
 											end
 										end
+										else if (ir[3:0] == 6) begin
+											// NEG
+											f <= f_from_alu;
+											data_to_write <= alu_res;
+											addr <= mbr >> 1;
+											memwr <= 1'b1;
+											memrd <= 1'b0;
+											mc_count <= 3;
+										end
 										else begin
 											regs[ir[11:8]] <= alu_res;
 											f <= f_from_alu;
@@ -2108,16 +2145,23 @@ always @ (posedge CLOCK_50) begin
 											addr <= pc >> 1;
 										end
 									end
+									3: begin
+										memwr <= 1'b0;
+										memrd <= 1'b1;
+										ir <= 0;     // initiate fetch
+										addr <= pc >> 1;
+									end
 									default: begin
 									end
 								endcase
-							end // end of SUB/OR/SHR/DIV reg, [xx]
-							// SUB/OR/SHR/DIV regx, [regy + xx]
+							end // end of SUB/OR/NEG/SHR/DIV reg, [xx]
+							// SUB/OR/NEG/SHR/DIV regx, [regy + xx]
 							4'b1100: begin
 								`ifdef DEBUG
 								case (ir[3:0])
 									4: $display("%2x: SUB r%-d, [r%-d + %-d]", ir[3:0], (ir[11:8]), (ir[15:12]), data);
 									5: $display("%2x: OR r%-d, [r%-d + %-d]", ir[3:0], (ir[11:8]), (ir[15:12]), data);
+									6: $display("%2x: NEG [r%-d + %-d]", ir[3:0], (ir[15:12]), data);
 									7: $display("%2x: SHR r%-d, [r%-d + %-d]", ir[3:0], (ir[11:8]), (ir[15:12]), data);
 									8: $display("%2x: DIV r%-d, [r%-d + %-d]", ir[3:0], (ir[11:8]), (ir[15:12]), data);
 									default: $display("WRONG OPCODE: %02d, %02x", ir[3:0], ir[3:0]);
@@ -2127,6 +2171,7 @@ always @ (posedge CLOCK_50) begin
 									0: begin
 										// step 1: we try to read memory from the xx address
 										addr <= (regs[ir[15:12]] + data) >> 1;
+										mbr <= (regs[ir[15:12]] + data);
 										mc_count <= 1;
 										pc <= pc + 2'd2;  // move to the next instruction
 									end
@@ -2134,6 +2179,7 @@ always @ (posedge CLOCK_50) begin
 										case (ir[3:0])
 											4: alu_op <= ALU_SUB;
 											5: alu_op <= ALU_OR;
+											6: alu_op <= ALU_NEG;
 											7: alu_op <= ALU_SHR;
 											8: alu_op <= ALU_DIV;
 											default: alu_op <= 0;
@@ -2158,6 +2204,15 @@ always @ (posedge CLOCK_50) begin
 												addr <= pc >> 1;
 											end
 										end
+										else if (ir[3:0] == 6) begin
+											// NEG
+											f <= f_from_alu;
+											data_to_write <= alu_res;
+											addr <= mbr >> 1;
+											memwr <= 1'b1;
+											memrd <= 1'b0;
+											mc_count <= 3;
+										end
 										else begin
 											regs[ir[11:8]] <= alu_res;
 											f <= f_from_alu;
@@ -2165,16 +2220,23 @@ always @ (posedge CLOCK_50) begin
 											addr <= pc >> 1;
 										end
 									end
+									3: begin
+										memwr <= 1'b0;
+										memrd <= 1'b1;
+										ir <= 0;     // initiate fetch
+										addr <= pc >> 1;
+									end
 									default: begin
 									end
 								endcase
-							end // end of SUB/OR/SHR/DIV regx, [regy + xx]
+							end // end of SUB/OR/NEG/SHR/DIV regx, [regy + xx]
 							// SUB/OR/SHR/DIV.B regx, [regy]
 							4'b1101: begin
 								`ifdef DEBUG
 								case (ir[3:0])
 									4: $display("%2x: SUB.B r%-d, [r%-d]", ir[3:0], (ir[11:8]), (ir[15:12]));
 									5: $display("%2x: OR.B r%-d, [r%-d]", ir[3:0], (ir[11:8]), (ir[15:12]));
+									6: $display("%2x: NEG.B [r%-d]", ir[3:0], (ir[15:12]));
 									7: $display("%2x: SHR.B r%-d, [r%-d]", ir[3:0], (ir[11:8]), (ir[15:12]));
 									8: $display("%2x: DIV.B r%-d, [r%-d]", ir[3:0], (ir[11:8]), (ir[15:12]));
 									default: $display("WRONG OPCODE: %02d, %02x", ir[3:0], ir[3:0]);
@@ -2190,11 +2252,13 @@ always @ (posedge CLOCK_50) begin
 										case (ir[3:0])
 											4: alu_op <= ALU_SUB;
 											5: alu_op <= ALU_OR;
+											6: alu_op <= ALU_NEG;
 											7: alu_op <= ALU_SHR;
 											8: alu_op <= ALU_DIV;
 											default: alu_op <= 0;
 										endcase
 										alu_a <= regs[ir[11:8]];
+										mbr <= data;
 										if (regs[ir[15:12]][0] == 1) begin
 											// odd address
 											alu_b <= {8'd0, data[7:0]};
@@ -2220,6 +2284,20 @@ always @ (posedge CLOCK_50) begin
 												addr <= pc >> 1;
 											end
 										end
+										else if (ir[3:0] == 6) begin
+											// NEG
+											f <= f_from_alu;
+											if (regs[ir[15:12]][0] == 1'b1) begin
+												data_to_write <= {alu_res[15:8], mbr[7:0]};
+											end
+											else begin
+												data_to_write <= {mbr[7:0], alu_res[7:0]};
+											end
+											addr <= regs[ir[15:12]] >> 1;
+											memwr <= 1'b1;
+											memrd <= 1'b0;
+											mc_count <= 3;
+										end
 										else begin
 											regs[ir[11:8]] <= alu_res;
 											f <= f_from_alu;
@@ -2227,16 +2305,23 @@ always @ (posedge CLOCK_50) begin
 											addr <= pc >> 1;
 										end
 									end
+									3: begin
+										memwr <= 1'b0;
+										memrd <= 1'b1;
+										ir <= 0;     // initiate fetch
+										addr <= pc >> 1;
+									end
 									default: begin
 									end
 								endcase
-							end // end of SUB/OR/SHR/DIV.B regx, [regy]
-							// SUB/OR/SHR/DIV.B reg, [xx]
+							end // end of SUB/OR/NEG/SHR/DIV.B regx, [regy]
+							// SUB/OR/NEG/SHR/DIV.B reg, [xx]
 							4'b1110: begin
 								`ifdef DEBUG
 								case (ir[3:0])
 									4: $display("%2x: SUB.B r%-d, [%-d]", ir[3:0], (ir[11:8]), data);
 									5: $display("%2x: OR.B r%-d, [%-d]", ir[3:0], (ir[11:8]), data);
+									6: $display("%2x: NEG.B [%-d]", ir[3:0], data);
 									7: $display("%2x: SHR.B r%-d, [%-d]", ir[3:0], (ir[11:8]), data);
 									8: $display("%2x: DIV.B r%-d, [%-d]", ir[3:0], (ir[11:8]), data);
 									default: $display("WRONG OPCODE: %02d, %02x", ir[3:0], ir[3:0]);
@@ -2254,11 +2339,13 @@ always @ (posedge CLOCK_50) begin
 										case (ir[3:0])
 											4: alu_op <= ALU_SUB;
 											5: alu_op <= ALU_OR;
+											6: alu_op <= ALU_NEG;
 											7: alu_op <= ALU_SHR;
 											8: alu_op <= ALU_DIV;
 											default: alu_op <= 0;
 										endcase
 										alu_a <= regs[ir[11:8]];
+										mbr_e <= data;
 										if (mbr[0] == 1) begin
 											// odd address
 											alu_b <= {8'd0, data[7:0]};
@@ -2284,6 +2371,20 @@ always @ (posedge CLOCK_50) begin
 												addr <= pc >> 1;
 											end
 										end
+										else if (ir[3:0] == 6) begin
+											// NEG
+											f <= f_from_alu;
+											if (mbr[0] == 1'b1) begin
+												data_to_write <= {alu_res[15:8], mbr_e[7:0]};
+											end
+											else begin
+												data_to_write <= {mbr_e[7:0], alu_res[7:0]};
+											end
+											addr <= mbr >> 1;
+											memwr <= 1'b1;
+											memrd <= 1'b0;
+											mc_count <= 3;
+										end
 										else begin
 											regs[ir[11:8]] <= alu_res;
 											f <= f_from_alu;
@@ -2291,16 +2392,23 @@ always @ (posedge CLOCK_50) begin
 											addr <= pc >> 1;
 										end
 									end
+									3: begin
+										memwr <= 1'b0;
+										memrd <= 1'b1;
+										ir <= 0;     // initiate fetch
+										addr <= pc >> 1;
+									end
 									default: begin
 									end
 								endcase
-							end // end of SUB/OR/SHR/DIV.B reg, [xx]
-							// SUB/OR/SHR/DIV.B regx, [regy + xx]
+							end // end of SUB/OR/NEG/SHR/DIV.B reg, [xx]
+							// SUB/OR/NEG/SHR/DIV.B regx, [regy + xx]
 							4'b1111: begin
 								`ifdef DEBUG
 								case (ir[3:0])
 									4: $display("%2x: SUB.B r%-d, [r%-d + %-d]", ir[3:0], (ir[11:8]), (ir[15:12]), data);
 									5: $display("%2x: SUB.B r%-d, [r%-d + %-d]", ir[3:0], (ir[11:8]), (ir[15:12]), data);
+									6: $display("%2x: NEG.B [r%-d + %-d]", ir[3:0], (ir[15:12]), data);
 									7: $display("%2x: SUB.B r%-d, [r%-d + %-d]", ir[3:0], (ir[11:8]), (ir[15:12]), data);
 									8: $display("%2x: DIV.B r%-d, [r%-d + %-d]", ir[3:0], (ir[11:8]), (ir[15:12]), data);
 									default: $display("WRONG OPCODE: %02d, %02x", ir[3:0], ir[3:0]);
@@ -2318,11 +2426,13 @@ always @ (posedge CLOCK_50) begin
 										case (ir[3:0])
 											4: alu_op <= ALU_SUB;
 											5: alu_op <= ALU_OR;
+											6: alu_op <= ALU_NEG;
 											7: alu_op <= ALU_SHR;
 											8: alu_op <= ALU_DIV;
 											default: alu_op <= 0;
 										endcase
 										alu_a <= regs[ir[11:8]];
+										mbr_e <= data;
 										if (mbr[0] == 1) begin
 											// odd address
 											alu_b <= {8'd0, data[7:0]};
@@ -2348,6 +2458,20 @@ always @ (posedge CLOCK_50) begin
 												addr <= pc >> 1;
 											end
 										end
+										else if (ir[3:0] == 6) begin
+											// NEG
+											f <= f_from_alu;
+											if (mbr[0] == 1'b1) begin
+												data_to_write <= {alu_res[15:8], mbr_e[7:0]};
+											end
+											else begin
+												data_to_write <= {mbr_e[7:0], alu_res[7:0]};
+											end
+											addr <= mbr >> 1;
+											memwr <= 1'b1;
+											memrd <= 1'b0;
+											mc_count <= 3;
+										end
 										else begin
 											regs[ir[11:8]] <= alu_res;
 											f <= f_from_alu;
@@ -2355,12 +2479,18 @@ always @ (posedge CLOCK_50) begin
 											addr <= pc >> 1;
 										end
 									end
+									3: begin
+										memwr <= 1'b0;
+										memrd <= 1'b1;
+										ir <= 0;     // initiate fetch
+										addr <= pc >> 1;
+									end
 									default: begin
 									end
 								endcase
-							end // end of SUB/OR/SHR/DIV.B regx, [regy + xx]
+							end // end of SUB/OR/NEG/SHR/DIV.B regx, [regy + xx]
 						endcase	
-					end // end of GROUP - 4, 5, 6, 7, 8 (ADD, SUB, AND, OR, XOR, SHL, SHR, MUL, DIV)
+					end // end of GROUP - 4, 5, 6, 7, 8 (ADD, SUB, AND, OR, XOR, NEG, SHL, SHR, MUL, DIV)
 
 					// GROUP - 9 (INC, DEC)
 					4'b1001: begin 
@@ -2702,7 +2832,7 @@ always @ (posedge CLOCK_50) begin
 						endcase // ir[7:4]
 					end // end of GROUP - 9 (INC, DEC)
 					
-					// GROUP - 10 (CMP)
+					// GROUP - 10 (CMP/INV)
 					4'b1010: begin 
 						case (ir[7:4])
 							// CMP regx, regy
@@ -2915,14 +3045,14 @@ always @ (posedge CLOCK_50) begin
 									end
 								endcase
 							end // end of CMP.B regx, [regy + XX]
-							// NEG reg
+							// INV reg
 							4'b1000: begin
 								`ifdef DEBUG
-								$display("%2x: NEG r%-d", ir[3:0], (ir[11:8]));
+								$display("%2x: INV r%-d", ir[3:0], (ir[11:8]));
 								`endif
 								case (mc_count)
 									0: begin
-										alu_op <= ALU_NEG;
+										alu_op <= ALU_INV;
 										alu_a <= regs[ir[11:8]];
 										alu_b <= 1;
 										mc_count <= 1;
@@ -2936,11 +3066,11 @@ always @ (posedge CLOCK_50) begin
 									default: begin
 									end
 								endcase
-							end // end of NEG reg
-							// NEG [reg]
+							end // end of INV reg
+							// INV [reg]
 							4'b1001: begin
 								`ifdef DEBUG
-								$display("%2x: NEG [r%-d]", ir[3:0], (ir[11:8]));
+								$display("%2x: INV [r%-d]", ir[3:0], (ir[11:8]));
 								`endif
 								case (mc_count)
 									0: begin
@@ -2949,7 +3079,7 @@ always @ (posedge CLOCK_50) begin
 										mc_count <= 1;
 									end
 									1: begin
-										alu_op <= ALU_NEG;
+										alu_op <= ALU_INV;
 										alu_a <= data;
 										alu_b <= 1;
 										mc_count <= 2;
@@ -2973,11 +3103,11 @@ always @ (posedge CLOCK_50) begin
 									default: begin
 									end
 								endcase
-							end // end of NEG [reg]
-							// NEG [XX]
+							end // end of INV [reg]
+							// INV [XX]
 							4'b1010: begin
 								`ifdef DEBUG
-								$display("%2x: NEG [%d]", ir[3:0], data);
+								$display("%2x: INV [%d]", ir[3:0], data);
 								`endif
 								case (mc_count)
 									0: begin
@@ -2987,7 +3117,7 @@ always @ (posedge CLOCK_50) begin
 										mc_count <= 1;
 									end
 									1: begin
-										alu_op <= ALU_NEG;
+										alu_op <= ALU_INV;
 										alu_a <= data;
 										alu_b <= 1;
 										mc_count <= 2;
@@ -3012,11 +3142,11 @@ always @ (posedge CLOCK_50) begin
 									default: begin
 									end
 								endcase
-							end // end of NEG [XX]
-							// NEG [reg + XX]
+							end // end of INV [XX]
+							// INV [reg + XX]
 							4'b1011: begin
 								`ifdef DEBUG
-								$display("%2x: NEG [r%-d + %d]", ir[3:0], ir[11:8], data);
+								$display("%2x: INV [r%-d + %d]", ir[3:0], ir[11:8], data);
 								`endif
 								case (mc_count)
 									0: begin
@@ -3026,7 +3156,7 @@ always @ (posedge CLOCK_50) begin
 										mc_count <= 1;
 									end
 									1: begin
-										alu_op <= ALU_NEG;
+										alu_op <= ALU_INV;
 										alu_a <= data;
 										alu_b <= 1;
 										mc_count <= 2;
@@ -3051,11 +3181,11 @@ always @ (posedge CLOCK_50) begin
 									default: begin
 									end
 								endcase
-							end // end of NEG [reg + xx]
-							// NEG.B [reg]
+							end // end of INV [reg + xx]
+							// INV.B [reg]
 							4'b1100: begin
 								`ifdef DEBUG
-								$display("%2x: NEG.B [r%-d]", ir[3:0], (ir[11:8]));
+								$display("%2x: INV.B [r%-d]", ir[3:0], (ir[11:8]));
 								`endif
 								case (mc_count)
 									0: begin
@@ -3065,7 +3195,7 @@ always @ (posedge CLOCK_50) begin
 										mc_count <= 1;
 									end
 									1: begin
-										alu_op <= ALU_NEG;
+										alu_op <= ALU_INV;
 										if (mbr[0] == 1) begin
 											// odd address
 											alu_a <= {8'd0, data[7:0]};
@@ -3101,11 +3231,11 @@ always @ (posedge CLOCK_50) begin
 									default: begin
 									end
 								endcase
-							end // end of NEG.B [reg]
-							// NEG.B [XX]
+							end // end of INV.B [reg]
+							// INV.B [XX]
 							4'b1101: begin
 								`ifdef DEBUG
-								$display("%2x: NEG.B [%d]", ir[3:0], data);
+								$display("%2x: INV.B [%d]", ir[3:0], data);
 								`endif
 								case (mc_count)
 									0: begin
@@ -3115,7 +3245,7 @@ always @ (posedge CLOCK_50) begin
 										mc_count <= 1;
 									end
 									1: begin
-										alu_op <= ALU_NEG;
+										alu_op <= ALU_INV;
 										if (mbr[0] == 1) begin
 											// odd address
 											alu_a <= {8'd0, data[7:0]};
@@ -3152,11 +3282,11 @@ always @ (posedge CLOCK_50) begin
 									default: begin
 									end
 								endcase
-							end // end of NEG [XX]
-							// NEG.B [reg + XX]
+							end // end of INV [XX]
+							// INV.B [reg + XX]
 							4'b1110: begin
 								`ifdef DEBUG
-								$display("%2x: NEG.B [r%-d + %d]", ir[3:0], ir[11:8], data);
+								$display("%2x: INV.B [r%-d + %d]", ir[3:0], ir[11:8], data);
 								`endif
 								case (mc_count)
 									0: begin
@@ -3166,7 +3296,7 @@ always @ (posedge CLOCK_50) begin
 										mc_count <= 1;
 									end
 									1: begin
-										alu_op <= ALU_NEG;
+										alu_op <= ALU_INV;
 										if (mbr[0] == 1) begin
 											// odd address
 											alu_a <= {8'd0, data[7:0]};
@@ -3203,9 +3333,9 @@ always @ (posedge CLOCK_50) begin
 									default: begin
 									end
 								endcase
-							end // end of NEG [reg + xx]
+							end // end of INV [reg + xx]
 						endcase // ir[7:4]
-					end // end of CMP/NEG GROUP
+					end // end of CMP/INV GROUP
 					
 				endcase	// {ir[3:0]}  - opcode
 			end

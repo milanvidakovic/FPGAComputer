@@ -7,9 +7,19 @@ The 16-bit CPU has 8 general-purpose registers (r0 – r7), pc (program counter), 
 
 The address bus is 16 bits wide, addressing 65536 bytes. Data bus is also 16 bits wide, but all the addresses are 8-bit aligned, meaning that two bytes are fetched with one memory access. This gives 65536 bytes, or 64KB of memory accessed two bytes at the same time.
 
+<<<<<<< HEAD
+Video output is VGA, 640x480. Text mode hase 80x60 characters, each character being 8x8  pixels in dimensions. Video frame buffer in text mode has 4800 16-bit words (80x60 characters), starting at 26880 decimal. The lower byte has the ASCII character, while the upper byte has the attributes (3 bits for the background color, 3 bits for the foreground color, inverted, and the last two bits unused). 
+=======
 Video output is VGA, 640x480. Text mode hase 80x60 characters, each character being 8x8  pixels in dimensions. Video frame buffer in text mode has 4800 16-bit words (80x60 characters). The lower byte has the ASCII character, while the upper byte has the attributes (3 bits for the background color, 3 bits for the foreground color, inverted, and the last two bits unused). In graphics mode, the resolution is 320x240 pixels. Each pixel is 4 bits long, having two pixels per byte in the frame buffer. Each pixel's color is defined by those four bits by: xrgb.
+>>>>>>> branch 'master' of https://github.com/milanvidakovic/FPGAComputer.git
 
+<<<<<<< HEAD
+In graphics mode, the resolution is 320x240 pixels. Each pixel is 4 bits long, having two pixels per byte in the frame buffer. Frame buffer starts at 26880 decimal. Each pixel's color is defined by those four bits by: xrgb.
+
+It has three interrupts: IRQ0, IRQ1 and IRQ2. IRQ0 is connected to the KEY2 of the DE0-NANO, IRQ1 is connected to the UART, while IRQ2 is connected to the PS/2 keyboard. Whenever a byte comes to the UART, it generates an IRQ1. Whenever a key is pressed, couple of bytes are received (make and break codes), in a sequence, each causing the IRQ2 to fire.
+=======
 It has three interrupts: IRQ0, IRQ1 and IRQ2. IRQ0 is connected to the KEY2 of the DE0-NANO, IDQ1 is connected to the UART, while IRQ2 is connected to the PS/2 keyboard. Whenever a byte comes to the UART, it generates an IRQ1. Whenever a key is pressed, couple of bytes are received (make and break codes), in a sequence, each causing the IRQ2 to fire.
+>>>>>>> branch 'master' of https://github.com/milanvidakovic/FPGAComputer.git
 
 The interrupt causes the CPU to push flags to the stack, then to push PC to the stack and then to jump to the location designated for the CPU:
 * for the IRQ0, it is 0x0008,
@@ -49,8 +59,49 @@ xrgbxrgb
 One byte holds two pixels. The x bit is unused, and the other bits define red, green and blue component of the color for each of those two pixels. Video frame buffer starts at the address 26880 (decimal). So, if you want to put four white pixels at the top left corner of the screen (from the (0,0) to the (3,0) coordinates), you need to type:
 
 mov r0, 0x7777
-st [2400], r0
+st [26880], r0
 
+## Hardware Sprites
+The computer supports up to 16 hardware sprites, each being 16x16 pixels. Each sprite is defined by the 8-byte structure:
+- sprite definition address (2 bytes)
+- x coordinate (2 bytes)
+- y coordinate (2 bytes)
+- transparent color (2 bytes).
+
+The sprite structure for the first sprite starts at 56 decimal. Each next sprite structure starts 8 bytes later. 
+
+Sprite definition consists of 16 lines, each line described by 16 pixels, each pixel defined by 4 bits: xrgb.
+This means that one sprite line consists of 8 bytes (two pixels per byte), so total bytes needed for the sprite definition is 8x16 bytes.
+
+Here is the example of showing one sprite at (25, 25):
+
+	mov r0, sprite_def
+	mov r1, 56
+	st [r1], r0  ; sprite definition is at sprite_def address
+	mov r0, 25
+	st [r1 + 2], r0  ; x = 25  at addr 58
+	mov r0, 25
+	st [r1 + 4], r0  ; y = 25  at addr 60
+	mov r0, 0
+	st [r1 + 6], r0  ; transparent color is black (0) at addr 62
+; sprite definition
+sprite_def:
+  #d16 0x0000, 0x0000, 0x0000, 0x0000  ; 0
+  #d16 0x0000, 0x000f, 0xf000, 0x0000  ; 1
+  #d16 0x0000, 0x000f, 0xf000, 0x0000  ; 2
+  #d16 0x0000, 0x000f, 0xf000, 0x0000  ; 3
+  #d16 0x0000, 0x004f, 0xf400, 0x0000  ; 4
+  #d16 0x0000, 0x004f, 0xf400, 0x0000  ; 5
+  #d16 0x0000, 0x044f, 0xf440, 0x0000  ; 6
+  #d16 0x0000, 0x444f, 0xf444, 0x0000  ; 7
+  #d16 0x0004, 0x444f, 0xf444, 0x4000  ; 8
+  #d16 0x0044, 0x444f, 0xf444, 0x4400  ; 9
+  #d16 0x0400, 0x004f, 0xf400, 0x0040  ; 10
+  #d16 0x0000, 0x004f, 0xf400, 0x0000  ; 11
+  #d16 0x0000, 0x004f, 0xf400, 0x0000  ; 12
+  #d16 0x0000, 0x041f, 0xf140, 0x0000  ; 13
+  #d16 0x0000, 0x4111, 0x1114, 0x0000  ; 14
+  #d16 0x0004, 0x4444, 0x4444, 0x4000  ; 15
 
 # UART interface
 

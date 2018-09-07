@@ -1,5 +1,9 @@
 Flow report for computer
+<<<<<<< HEAD
+Sat Nov 24 10:38:03 2018
+=======
 Sun Sep 02 15:22:05 2018
+>>>>>>> branch 'master' of https://github.com/milanvidakovic/FPGAComputer.git
 Quartus II 64-Bit Version 13.0.0 Build 156 04/24/2013 SJ Web Edition
 
 
@@ -40,17 +44,28 @@ applicable agreement for further details.
 +---------------------------------------------------------------------------------+
 ; Flow Summary                                                                    ;
 +------------------------------------+--------------------------------------------+
+<<<<<<< HEAD
+; Flow Status                        ; Successful - Sat Nov 24 10:38:03 2018      ;
+=======
 ; Flow Status                        ; Successful - Sun Sep 02 15:22:05 2018      ;
+>>>>>>> branch 'master' of https://github.com/milanvidakovic/FPGAComputer.git
 ; Quartus II 64-Bit Version          ; 13.0.0 Build 156 04/24/2013 SJ Web Edition ;
 ; Revision Name                      ; computer                                   ;
 ; Top-level Entity Name              ; computer                                   ;
 ; Family                             ; Cyclone IV E                               ;
 ; Device                             ; EP4CE22F17C6                               ;
 ; Timing Models                      ; Final                                      ;
+<<<<<<< HEAD
+; Total logic elements               ; 8,143 / 22,320 ( 36 % )                    ;
+;     Total combinational functions  ; 6,915 / 22,320 ( 31 % )                    ;
+;     Dedicated logic registers      ; 3,176 / 22,320 ( 14 % )                    ;
+; Total registers                    ; 3176                                       ;
+=======
 ; Total logic elements               ; 4,502 / 22,320 ( 20 % )                    ;
 ;     Total combinational functions  ; 4,436 / 22,320 ( 20 % )                    ;
 ;     Dedicated logic registers      ; 674 / 22,320 ( 3 % )                       ;
 ; Total registers                    ; 674                                        ;
+>>>>>>> branch 'master' of https://github.com/milanvidakovic/FPGAComputer.git
 ; Total pins                         ; 87 / 154 ( 56 % )                          ;
 ; Total virtual pins                 ; 0                                          ;
 ; Total memory bits                  ; 524,288 / 608,256 ( 86 % )                 ;
@@ -64,7 +79,11 @@ applicable agreement for further details.
 +-------------------+---------------------+
 ; Option            ; Setting             ;
 +-------------------+---------------------+
+<<<<<<< HEAD
+; Start date & time ; 11/24/2018 10:36:21 ;
+=======
 ; Start date & time ; 09/02/2018 15:20:59 ;
+>>>>>>> branch 'master' of https://github.com/milanvidakovic/FPGAComputer.git
 ; Main task         ; Compilation         ;
 ; Revision Name     ; computer            ;
 +-------------------+---------------------+
@@ -75,7 +94,11 @@ applicable agreement for further details.
 +-------------------------------------+---------------------------------+---------------+-------------+----------------+
 ; Assignment Name                     ; Value                           ; Default Value ; Entity Name ; Section Id     ;
 +-------------------------------------+---------------------------------+---------------+-------------+----------------+
+<<<<<<< HEAD
+; COMPILER_SIGNATURE_ID               ; 154027284138872.154305218112668 ; --            ; --          ; --             ;
+=======
 ; COMPILER_SIGNATURE_ID               ; 154027284138872.153589445906980 ; --            ; --          ; --             ;
+>>>>>>> branch 'master' of https://github.com/milanvidakovic/FPGAComputer.git
 ; EDA_OUTPUT_DATA_FORMAT              ; Systemverilog Hdl               ; --            ; --          ; eda_simulation ;
 ; EDA_SIMULATION_TOOL                 ; ModelSim-Altera (SystemVerilog) ; <None>        ; --          ; --             ;
 ; PARTITION_COLOR                     ; 16764057                        ; --            ; --          ; Top            ;
@@ -93,12 +116,21 @@ applicable agreement for further details.
 +---------------------------+--------------+-------------------------+---------------------+------------------------------------+
 ; Module Name               ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
 +---------------------------+--------------+-------------------------+---------------------+------------------------------------+
+<<<<<<< HEAD
+; Analysis & Synthesis      ; 00:00:41     ; 1.0                     ; 4689 MB             ; 00:00:41                           ;
+; Fitter                    ; 00:00:38     ; 1.0                     ; 5073 MB             ; 00:00:38                           ;
+; Assembler                 ; 00:00:02     ; 1.0                     ; 4586 MB             ; 00:00:02                           ;
+; TimeQuest Timing Analyzer ; 00:00:06     ; 1.0                     ; 4752 MB             ; 00:00:06                           ;
+; EDA Netlist Writer        ; 00:00:08     ; 1.0                     ; 4641 MB             ; 00:00:07                           ;
+; Total                     ; 00:01:35     ; --                      ; --                  ; 00:01:34                           ;
+=======
 ; Analysis & Synthesis      ; 00:00:26     ; 1.0                     ; 561 MB              ; 00:00:26                           ;
 ; Fitter                    ; 00:00:23     ; 1.0                     ; 925 MB              ; 00:00:23                           ;
 ; Assembler                 ; 00:00:02     ; 1.0                     ; 483 MB              ; 00:00:01                           ;
 ; TimeQuest Timing Analyzer ; 00:00:05     ; 1.0                     ; 607 MB              ; 00:00:04                           ;
 ; EDA Netlist Writer        ; 00:00:05     ; 1.0                     ; 509 MB              ; 00:00:05                           ;
 ; Total                     ; 00:01:01     ; --                      ; --                  ; 00:00:59                           ;
+>>>>>>> branch 'master' of https://github.com/milanvidakovic/FPGAComputer.git
 +---------------------------+--------------+-------------------------+---------------------+------------------------------------+
 
 
