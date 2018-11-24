@@ -152,5 +152,5 @@ To read the received make/brak code, you need to use the IN instruction:
 ```
 in r1, [68]; r1 holds the received byte from the PS/2 keyboard
 ```
-You need to make additional code to parse make/break code.
+You need to make additional code to parse make/break code. 
 
