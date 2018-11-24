@@ -76,16 +76,16 @@ This means that one sprite line consists of 8 bytes (two pixels per byte), so to
 Here is the example of showing one sprite at (25, 25):
 
 ```
-	mov r0, sprite_def
-	mov r1, 56
-	st [r1], r0  ; sprite definition is at sprite_def address
-	mov r0, 25
-	st [r1 + 2], r0  ; x = 25  at addr 58
-	mov r0, 25
-	st [r1 + 4], r0  ; y = 25  at addr 60
-	mov r0, 0
-	st [r1 + 6], r0  ; transparent color is black (0) at addr 62
-	; sprite definition
+  mov r0, sprite_def
+  mov r1, 56
+  st [r1], r0  ; sprite definition is at sprite_def address
+  mov r0, 25
+  st [r1 + 2], r0  ; x = 25  at addr 58
+  mov r0, 25
+  st [r1 + 4], r0  ; y = 25  at addr 60
+  mov r0, 0
+  st [r1 + 6], r0  ; transparent color is black (0) at addr 62
+  ; sprite definition
 sprite_def:
   #d16 0x0000, 0x0000, 0x0000, 0x0000  ; 0
   #d16 0x0000, 0x000f, 0xf000, 0x0000  ; 1
