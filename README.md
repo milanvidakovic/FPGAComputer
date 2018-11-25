@@ -1,17 +1,17 @@
 # FPGAComputer
 This is a 16-bit computer implemented in the DE0-NANO FPGA.
 
-The computer has 16-bit CPU, 64KB, UART (115200 bps), and VGA (640x480, text-based frame buffer, 80x60 characters, or the graphics mode of 320x240 pixels, each one in one of 8 colors).
+The computer has 16-bit CPU, 64KB static RAM, UART (115200 bps), VGA (640x480, text-based frame buffer, 80x60 characters, or the graphics mode of 320x240 pixels, each one in one of 8 colors, with 16 hardware sprites), and PS/2 keyboard support.
 
 The 16-bit CPU has 8 general-purpose registers (r0 – r7), pc (program counter), sp (stack pointer), ir (instruction register), mbr (memory buffer register), h (higher word when multiplying, or remainder when dividing).
 
 The address bus is 16 bits wide, addressing 65536 bytes. Data bus is also 16 bits wide, but all the addresses are 8-bit aligned, meaning that two bytes are fetched with one memory access. This gives 65536 bytes, or 64KB of memory accessed two bytes at the same time.
 
-Video output is VGA, 640x480. Text mode hase 80x60 characters, each character being 8x8  pixels in dimensions. Video frame buffer in text mode has 4800 16-bit words (80x60 characters), starting at 26880 decimal. The lower byte has the ASCII character, while the upper byte has the attributes (3 bits for the background color, 3 bits for the foreground color, inverted, and the last two bits unused). 
+Video output is VGA, 640x480. Text mode hase 80x60 characters, each character being 8x8  pixels in dimensions. Video frame buffer in text mode has 4800 16-bit words (80x60 characters), starting at 26880 decimal. The lower byte has the ASCII character, while the upper byte has the attributes (3 bits for the background color, 3 bits for the foreground color, inverted, and the two bits unused). 
 
 In graphics mode, the resolution is 320x240 pixels. Each pixel is 4 bits long, having two pixels per byte in the frame buffer. Frame buffer starts at 26880 decimal. Each pixel's color is defined by those four bits by: xrgb.
 
-It has three interrupts: IRQ0, IRQ1 and IRQ2. IRQ0 is connected to the KEY2 of the DE0-NANO, IRQ1 is connected to the UART, while IRQ2 is connected to the PS/2 keyboard. Whenever a byte comes to the UART, it generates an IRQ1. Whenever a key is pressed, couple of bytes are received (make and break codes), in a sequence, each causing the IRQ2 to fire.
+It has three interrupts: IRQ0, IRQ1 and IRQ2. IRQ0 is connected to the KEY2 of the DE0-NANO (KEY1 is the reset key), IRQ1 is connected to the UART, while IRQ2 is connected to the PS/2 keyboard. Whenever a byte comes to the UART, it generates an IRQ1. Whenever a PS/2 key is pressed, couple of bytes are received (make and break codes), in a sequence, each causing the IRQ2 to fire.
 
 The interrupt causes the CPU to push flags to the stack, then to push PC to the stack and then to jump to the location designated for the CPU:
 * for the IRQ0, it is 0x0008,
